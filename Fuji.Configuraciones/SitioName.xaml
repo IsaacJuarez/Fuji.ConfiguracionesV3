@@ -1,0 +1,36 @@
+﻿<Window x:Class="Fuji.Configuraciones.SitioName"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Fuji.Configuraciones"
+        mc:Ignorable="d"
+        Title="Nombre del Sitio" Height="300" Width="300">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="assets/WallPaperWhite.jpg" Stretch="UniformToFill"></ImageBrush>
+        </Grid.Background>
+        <StackPanel Margin="0,0,0,144">
+            <Image x:Name="image" HorizontalAlignment="Left" Height="127" VerticalAlignment="Top" Margin="40,0,0,40" Width="204" Source="assets/FEED2CJAV.png"/>
+        </StackPanel>
+        <StackPanel Margin="0,125,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Clave de Sitio" FontWeight="Bold" Margin="10,0,214,0" FontSize="12" Height="30" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                <TextBox Text="" CharacterCasing="Upper" x:Name="txtSitio" Grid.Row="0" Margin="95,1,31,1" Width="178" HorizontalAlignment="Center" MaxLength="4"/>
+                <TextBlock Text="Nombre" Grid.Row="1" FontWeight="Bold" FontSize="12" Margin="41,0,214,0" HorizontalAlignment="Center" />
+                <TextBox x:Name="txtNombre" Grid.Row="1" Margin="95,1,31,1" CharacterCasing="Upper"/>
+                <Button x:Name="btnSaveSitio" Content="Guardar" Grid.Row="3" Margin="176,0,31,0" Click="btnSaveSitio_Click" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dbConfigModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_CAT_Extensiones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vchClave" Type="varchar" MaxLength="200" />
+          <Property Name="vchDescripcion" Type="varchar" MaxLength="200" />
+          <Property Name="vchValor" Type="varchar" MaxLength="5000" />
+          <Property Name="datFecha" Type="datetime" />
+          <Property Name="bitActivo" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_CAT_TipoUsuario">
+          <Key>
+            <PropertyRef Name="intTipoUsuarioID" />
+          </Key>
+          <Property Name="intTipoUsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vchDescripcion" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="bitEstatus" Type="bit" Nullable="false" />
+          <Property Name="datFecha" Type="datetime" Nullable="false" />
+          <Property Name="vchUserAdmin" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="tbl_CAT_Usuarios">
+          <Key>
+            <PropertyRef Name="intUsuarioID" />
+          </Key>
+          <Property Name="intUsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="intTipoUsuarioID" Type="int" Nullable="false" />
+          <Property Name="vchNombre" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="vchUsuario" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="vchPassword" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="bitActivo" Type="bit" Nullable="false" />
+          <Property Name="datFecha" Type="datetime" Nullable="false" />
+          <Property Name="vchUserAdmin" Type="varchar" MaxLength="100" />
+          <Property Name="id_Sitio" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_ConfigSitio">
+          <Key>
+            <PropertyRef Name="id_Sitio" />
+          </Key>
+          <Property Name="id_Sitio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vchClaveSitio" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="vchNombreSitio" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="vchIPCliente" Type="varchar" MaxLength="200" />
+          <Property Name="vchMaskCliente" Type="varchar" MaxLength="200" />
+          <Property Name="intPuertoCliente" Type="int" />
+          <Property Name="vchIPServidor" Type="varchar" MaxLength="200" />
+          <Property Name="intPuertoServer" Type="int" />
+          <Property Name="datFechaSistema" Type="datetime" />
+          <Property Name="vchUserChanges" Type="int" />
+          <Property Name="vchAETitle" Type="varchar" MaxLength="200" />
+          <Property Name="bitActivo" Type="bit" />
+        </EntityType>
+        <Association Name="FK_CAT_TipoUsuarios_CAT_Usuarios">
+          <End Role="tbl_CAT_TipoUsuario" Type="Self.tbl_CAT_TipoUsuario" Multiplicity="1" />
+          <End Role="tbl_CAT_Usuarios" Type="Self.tbl_CAT_Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_CAT_TipoUsuario">
+              <PropertyRef Name="intTipoUsuarioID" />
+            </Principal>
+            <Dependent Role="tbl_CAT_Usuarios">
+              <PropertyRef Name="intTipoUsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConfigSitio_CAT_Usuarios">
+          <End Role="tbl_ConfigSitio" Type="Self.tbl_ConfigSitio" Multiplicity="0..1" />
+          <End Role="tbl_CAT_Usuarios" Type="Self.tbl_CAT_Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_ConfigSitio">
+              <PropertyRef Name="id_Sitio" />
+            </Principal>
+            <Dependent Role="tbl_CAT_Usuarios">
+              <PropertyRef Name="id_Sitio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbConfigModelStoreContainer">
+          <EntitySet Name="tbl_CAT_Extensiones" EntityType="Self.tbl_CAT_Extensiones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_CAT_TipoUsuario" EntityType="Self.tbl_CAT_TipoUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_CAT_Usuarios" EntityType="Self.tbl_CAT_Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_ConfigSitio" EntityType="Self.tbl_ConfigSitio" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CAT_TipoUsuarios_CAT_Usuarios" Association="Self.FK_CAT_TipoUsuarios_CAT_Usuarios">
+            <End Role="tbl_CAT_TipoUsuario" EntitySet="tbl_CAT_TipoUsuario" />
+            <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConfigSitio_CAT_Usuarios" Association="Self.FK_ConfigSitio_CAT_Usuarios">
+            <End Role="tbl_ConfigSitio" EntitySet="tbl_ConfigSitio" />
+            <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbConfigModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_ConfigSitio">
+          <Key>
+            <PropertyRef Name="id_Sitio" />
+          </Key>
+          <Property Name="id_Sitio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vchClaveSitio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vchNombreSitio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vchIPCliente" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="vchMaskCliente" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="intPuertoCliente" Type="Int32" />
+          <Property Name="vchIPServidor" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="intPuertoServer" Type="Int32" />
+          <Property Name="datFechaSistema" Type="DateTime" Precision="3" />
+          <Property Name="vchUserChanges" Type="Int32" />
+          <NavigationProperty Name="tbl_CAT_Usuarios" Relationship="dbConfigModel.FK_ConfigSitio_CAT_Usuarios" FromRole="tbl_ConfigSitio" ToRole="tbl_CAT_Usuarios" />
+          <Property Name="vchAETitle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="bitActivo" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="dbConfigEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_ConfigSitio" EntityType="Self.tbl_ConfigSitio" />
+          <EntitySet Name="tbl_CAT_TipoUsuario" EntityType="dbConfigModel.tbl_CAT_TipoUsuario" />
+          <EntitySet Name="tbl_CAT_Usuarios" EntityType="dbConfigModel.tbl_CAT_Usuarios" />
+          <AssociationSet Name="FK_CAT_TipoUsuarios_CAT_Usuarios" Association="dbConfigModel.FK_CAT_TipoUsuarios_CAT_Usuarios">
+            <End Role="tbl_CAT_TipoUsuario" EntitySet="tbl_CAT_TipoUsuario" />
+            <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConfigSitio_CAT_Usuarios" Association="dbConfigModel.FK_ConfigSitio_CAT_Usuarios">
+            <End Role="tbl_ConfigSitio" EntitySet="tbl_ConfigSitio" />
+            <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
+          </AssociationSet>
+          <EntitySet Name="tbl_CAT_Extensiones" EntityType="dbConfigModel.tbl_CAT_Extensiones" />
+        </EntityContainer>
+        <EntityType Name="tbl_CAT_TipoUsuario">
+          <Key>
+            <PropertyRef Name="intTipoUsuarioID" />
+          </Key>
+          <Property Name="intTipoUsuarioID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vchDescripcion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="bitEstatus" Type="Boolean" Nullable="false" />
+          <Property Name="datFecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="vchUserAdmin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_CAT_Usuarios" Relationship="dbConfigModel.FK_CAT_TipoUsuarios_CAT_Usuarios" FromRole="tbl_CAT_TipoUsuario" ToRole="tbl_CAT_Usuarios" />
+        </EntityType>
+        <EntityType Name="tbl_CAT_Usuarios">
+          <Key>
+            <PropertyRef Name="intUsuarioID" />
+          </Key>
+          <Property Name="intUsuarioID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="intTipoUsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="vchNombre" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="vchUsuario" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="vchPassword" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="bitActivo" Type="Boolean" Nullable="false" />
+          <Property Name="datFecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="vchUserAdmin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_CAT_TipoUsuario" Relationship="dbConfigModel.FK_CAT_TipoUsuarios_CAT_Usuarios" FromRole="tbl_CAT_Usuarios" ToRole="tbl_CAT_TipoUsuario" />
+          <Property Name="id_Sitio" Type="Int32" />
+          <NavigationProperty Name="tbl_ConfigSitio" Relationship="dbConfigModel.FK_ConfigSitio_CAT_Usuarios" FromRole="tbl_CAT_Usuarios" ToRole="tbl_ConfigSitio" />
+        </EntityType>
+        <Association Name="FK_CAT_TipoUsuarios_CAT_Usuarios">
+          <End Type="dbConfigModel.tbl_CAT_TipoUsuario" Role="tbl_CAT_TipoUsuario" Multiplicity="1" />
+          <End Type="dbConfigModel.tbl_CAT_Usuarios" Role="tbl_CAT_Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_CAT_TipoUsuario">
+              <PropertyRef Name="intTipoUsuarioID" />
+            </Principal>
+            <Dependent Role="tbl_CAT_Usuarios">
+              <PropertyRef Name="intTipoUsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConfigSitio_CAT_Usuarios">
+          <End Type="dbConfigModel.tbl_ConfigSitio" Role="tbl_ConfigSitio" Multiplicity="0..1" />
+          <End Type="dbConfigModel.tbl_CAT_Usuarios" Role="tbl_CAT_Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_ConfigSitio">
+              <PropertyRef Name="id_Sitio" />
+            </Principal>
+            <Dependent Role="tbl_CAT_Usuarios">
+              <PropertyRef Name="id_Sitio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tbl_CAT_Extensiones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vchClave" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="vchDescripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="vchValor" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="datFecha" Type="DateTime" Precision="3" />
+          <Property Name="bitActivo" Type="Boolean" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbConfigModelStoreContainer" CdmEntityContainer="dbConfigEntities">
+          <EntitySetMapping Name="tbl_ConfigSitio">
+            <EntityTypeMapping TypeName="dbConfigModel.tbl_ConfigSitio">
+              <MappingFragment StoreEntitySet="tbl_ConfigSitio">
+                <ScalarProperty Name="bitActivo" ColumnName="bitActivo" />
+                <ScalarProperty Name="vchAETitle" ColumnName="vchAETitle" />
+                <ScalarProperty Name="id_Sitio" ColumnName="id_Sitio" />
+                <ScalarProperty Name="vchClaveSitio" ColumnName="vchClaveSitio" />
+                <ScalarProperty Name="vchNombreSitio" ColumnName="vchNombreSitio" />
+                <ScalarProperty Name="vchIPCliente" ColumnName="vchIPCliente" />
+                <ScalarProperty Name="vchMaskCliente" ColumnName="vchMaskCliente" />
+                <ScalarProperty Name="intPuertoCliente" ColumnName="intPuertoCliente" />
+                <ScalarProperty Name="vchIPServidor" ColumnName="vchIPServidor" />
+                <ScalarProperty Name="intPuertoServer" ColumnName="intPuertoServer" />
+                <ScalarProperty Name="datFechaSistema" ColumnName="datFechaSistema" />
+                <ScalarProperty Name="vchUserChanges" ColumnName="vchUserChanges" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_CAT_TipoUsuario">
+            <EntityTypeMapping TypeName="dbConfigModel.tbl_CAT_TipoUsuario">
+              <MappingFragment StoreEntitySet="tbl_CAT_TipoUsuario">
+                <ScalarProperty Name="vchUserAdmin" ColumnName="vchUserAdmin" />
+                <ScalarProperty Name="datFecha" ColumnName="datFecha" />
+                <ScalarProperty Name="bitEstatus" ColumnName="bitEstatus" />
+                <ScalarProperty Name="vchDescripcion" ColumnName="vchDescripcion" />
+                <ScalarProperty Name="intTipoUsuarioID" ColumnName="intTipoUsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_CAT_Usuarios">
+            <EntityTypeMapping TypeName="dbConfigModel.tbl_CAT_Usuarios">
+              <MappingFragment StoreEntitySet="tbl_CAT_Usuarios">
+                <ScalarProperty Name="id_Sitio" ColumnName="id_Sitio" />
+                <ScalarProperty Name="vchUserAdmin" ColumnName="vchUserAdmin" />
+                <ScalarProperty Name="datFecha" ColumnName="datFecha" />
+                <ScalarProperty Name="bitActivo" ColumnName="bitActivo" />
+                <ScalarProperty Name="vchPassword" ColumnName="vchPassword" />
+                <ScalarProperty Name="vchUsuario" ColumnName="vchUsuario" />
+                <ScalarProperty Name="vchNombre" ColumnName="vchNombre" />
+                <ScalarProperty Name="intTipoUsuarioID" ColumnName="intTipoUsuarioID" />
+                <ScalarProperty Name="intUsuarioID" ColumnName="intUsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_CAT_Extensiones">
+            <EntityTypeMapping TypeName="dbConfigModel.tbl_CAT_Extensiones">
+              <MappingFragment StoreEntitySet="tbl_CAT_Extensiones">
+                <ScalarProperty Name="bitActivo" ColumnName="bitActivo" />
+                <ScalarProperty Name="datFecha" ColumnName="datFecha" />
+                <ScalarProperty Name="vchValor" ColumnName="vchValor" />
+                <ScalarProperty Name="vchDescripcion" ColumnName="vchDescripcion" />
+                <ScalarProperty Name="vchClave" ColumnName="vchClave" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

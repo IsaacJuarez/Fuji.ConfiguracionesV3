@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="dbConfigModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tbl_CAT_Extensiones">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="vchClave" Type="varchar" MaxLength="200" />
+    <Property Name="vchDescripcion" Type="varchar" MaxLength="200" />
+    <Property Name="vchValor" Type="varchar" MaxLength="5000" />
+    <Property Name="datFecha" Type="datetime" />
+    <Property Name="bitActivo" Type="bit" />
+  </EntityType>
+  <EntityType Name="tbl_CAT_TipoUsuario">
+    <Key>
+      <PropertyRef Name="intTipoUsuarioID" />
+    </Key>
+    <Property Name="intTipoUsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="vchDescripcion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="bitEstatus" Type="bit" Nullable="false" />
+    <Property Name="datFecha" Type="datetime" Nullable="false" />
+    <Property Name="vchUserAdmin" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="tbl_CAT_Usuarios">
+    <Key>
+      <PropertyRef Name="intUsuarioID" />
+    </Key>
+    <Property Name="intUsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="intTipoUsuarioID" Type="int" Nullable="false" />
+    <Property Name="vchNombre" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="vchUsuario" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="vchPassword" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="bitActivo" Type="bit" Nullable="false" />
+    <Property Name="datFecha" Type="datetime" Nullable="false" />
+    <Property Name="vchUserAdmin" Type="varchar" MaxLength="100" />
+    <Property Name="id_Sitio" Type="int" />
+  </EntityType>
+  <EntityType Name="tbl_ConfigSitio">
+    <Key>
+      <PropertyRef Name="id_Sitio" />
+    </Key>
+    <Property Name="id_Sitio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="vchClaveSitio" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="vchNombreSitio" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="vchIPCliente" Type="varchar" MaxLength="200" />
+    <Property Name="vchMaskCliente" Type="varchar" MaxLength="200" />
+    <Property Name="intPuertoCliente" Type="int" />
+    <Property Name="vchIPServidor" Type="varchar" MaxLength="200" />
+    <Property Name="intPuertoServer" Type="int" />
+    <Property Name="datFechaSistema" Type="datetime" />
+    <Property Name="vchUserChanges" Type="int" />
+    <Property Name="vchAETitle" Type="varchar" MaxLength="200" />
+    <Property Name="bitActivo" Type="bit" />
+  </EntityType>
+  <Association Name="FK_CAT_TipoUsuarios_CAT_Usuarios">
+    <End Role="tbl_CAT_TipoUsuario" Type="Self.tbl_CAT_TipoUsuario" Multiplicity="1" />
+    <End Role="tbl_CAT_Usuarios" Type="Self.tbl_CAT_Usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_CAT_TipoUsuario">
+        <PropertyRef Name="intTipoUsuarioID" />
+      </Principal>
+      <Dependent Role="tbl_CAT_Usuarios">
+        <PropertyRef Name="intTipoUsuarioID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ConfigSitio_CAT_Usuarios">
+    <End Role="tbl_ConfigSitio" Type="Self.tbl_ConfigSitio" Multiplicity="0..1" />
+    <End Role="tbl_CAT_Usuarios" Type="Self.tbl_CAT_Usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_ConfigSitio">
+        <PropertyRef Name="id_Sitio" />
+      </Principal>
+      <Dependent Role="tbl_CAT_Usuarios">
+        <PropertyRef Name="id_Sitio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="dbConfigModelStoreContainer">
+    <EntitySet Name="tbl_CAT_Extensiones" EntityType="Self.tbl_CAT_Extensiones" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_CAT_TipoUsuario" EntityType="Self.tbl_CAT_TipoUsuario" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_CAT_Usuarios" EntityType="Self.tbl_CAT_Usuarios" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_ConfigSitio" EntityType="Self.tbl_ConfigSitio" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CAT_TipoUsuarios_CAT_Usuarios" Association="Self.FK_CAT_TipoUsuarios_CAT_Usuarios">
+      <End Role="tbl_CAT_TipoUsuario" EntitySet="tbl_CAT_TipoUsuario" />
+      <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ConfigSitio_CAT_Usuarios" Association="Self.FK_ConfigSitio_CAT_Usuarios">
+      <End Role="tbl_ConfigSitio" EntitySet="tbl_ConfigSitio" />
+      <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

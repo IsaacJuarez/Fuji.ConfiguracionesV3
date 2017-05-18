@@ -1,0 +1,224 @@
+﻿<Window x:Class="Fuji.Configuraciones.Configuracion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:Fuji.Configuraciones"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:local="clr-namespace:MaskedTextBox"
+        Title="Configuración" Height="370" Width="600" MaxWidth="600" MaxHeight="400" ResizeMode="NoResize"
+        Icon="assets/favicon.ico"        >
+    <Grid Margin="0,0,0,-12">
+        <Grid.Background>
+            <ImageBrush ImageSource="assets/WallPaperWhite.jpg" Stretch="UniformToFill"></ImageBrush>
+        </Grid.Background>
+        <StackPanel Margin="0,0,0,288">
+            <Grid Height="20" Margin="286,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock  x:Name="txtUserActive" Text="Usuario:" FontWeight="Bold" Foreground="Green" Margin="20,0,0,0"></TextBlock>
+                <TextBlock Grid.Column="1" x:Name="txtSitioActive" Text="Sitio:" FontWeight="Bold" Foreground="DarkBlue" Margin="20,0,0,0"></TextBlock>
+                <Image  Grid.Column="2" x:Name="imgActive" Source="assets/offline.png" Width="15" Height="15" ToolTip="Fuera de linea con el servidor" Margin="30,0,10,1"></Image>
+            </Grid>
+        </StackPanel>
+        <StackPanel Margin="0,40,0,0">
+            <TabControl x:Name="tabControl" Height="auto" Margin="10,0" SelectionChanged="tabControl_SelectionChanged" Width="auto">
+                <TabItem Header="Local" Margin="0,-2,-2,0" HorizontalAlignment="Right" Width="43">
+                    <Grid Background="#FFE5E5E5">
+                        <StackPanel>
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label>Clave del Sitio:</Label>
+                                <TextBox x:Name="txtClaveSitio" MaxLength="4" CharacterCasing="Upper" Grid.Column="1" Margin="0,0,0,0" TextChanged="txtClaveSitio_TextChanged" />
+                                <Label Grid.Row="1">Nombre del Sitio:</Label>
+                                <TextBox x:Name="txtNombreSitio" CharacterCasing="Upper" Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" TextChanged="txtNombreSitio_TextChanged" />
+                                <Label Grid.Row="2">IP:</Label>
+                                <StackPanel  Grid.Row="2" Grid.Column="1">
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBox x:Name="txtIPC1" Text="" PreviewKeyDown="txtIPC1_PreviewKeyDown" PreviewTextInput="txtIPC1_PreviewTextInput" TextChanged="txtIPC1_TextChanged" PreviewKeyUp="txtIPC1_PreviewKeyUp" MaxLength="3" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="1"></TextBlock>
+                                        <TextBox x:Name="txtIPC2" Grid.Column="2" Text="" KeyDown="txtIPC2_KeyDown" PreviewTextInput="txtIPC2_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" PreviewKeyUp="txtIPC2_PreviewKeyUp" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="3"></TextBlock>
+                                        <TextBox x:Name="txtIPC3" Grid.Column="4" Text="" KeyDown="txtIPC3_KeyDown" PreviewTextInput="txtIPC3_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" PreviewKeyUp="txtIPC3_PreviewKeyUp" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="5"></TextBlock>
+                                        <TextBox x:Name="txtIPC4" Grid.Column="6" Text="" PreviewTextInput="txtIPC4_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" Width="50" />
+                                        <Button x:Name="btnIPLocal" Grid.Column="7" Content="IP Local" Height="20" VerticalAlignment="Bottom" Click="btnIPLocal_Click" />
+                                    </Grid>
+                                </StackPanel>
+                                <Label Grid.Row="3">Mascara de Red:</Label>
+                                <StackPanel  Grid.Row="3" Grid.Column="1">
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBox x:Name="txtMaskC1" Text="" PreviewKeyDown="txtMaskC1_PreviewKeyDown" PreviewTextInput="txtMaskC1_PreviewTextInput" TextChanged="txtIPC1_TextChanged" PreviewKeyUp="txtMaskC1_PreviewKeyUp" MaxLength="3" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="1"></TextBlock>
+                                        <TextBox x:Name="txtMaskC2" Grid.Column="2" Text="" KeyDown="txtMaskC2_KeyDown" PreviewTextInput="txtMaskC2_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" PreviewKeyUp="txtMaskC2_PreviewKeyUp" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="3"></TextBlock>
+                                        <TextBox x:Name="txtMaskC3" Grid.Column="4" Text="" KeyDown="txtMaskC3_KeyDown" PreviewTextInput="txtMaskC3_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" PreviewKeyUp="txtMaskC3_PreviewKeyUp" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="5"></TextBlock>
+                                        <TextBox x:Name="txtMaskC4" Grid.Column="6" Text="" PreviewTextInput="txtMaskC4_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" Width="50" />
+                                    </Grid>
+                                </StackPanel>
+                                <Label Grid.Row="4">Puerto:</Label>
+                                <TextBox x:Name="txtPuertoCliente" MaxLength="5" Grid.Row="4" Grid.Column="1" Margin="0,0,0,0" PreviewTextInput="txtPuertoCliente_PreviewTextInput" TextChanged="txtPuertoCliente_TextChanged"  />
+                                <Label Grid.Row="5" Content="AETitle:" ></Label>
+                                <TextBox x:Name="txtAET" Text="" IsEnabled="False" Grid.Row="5" Grid.Column="1"></TextBox>
+                            </Grid>
+                            <Button x:Name="btnSaveCliente" Content="Guardar" Click="btnSaveCliente_Click" Margin="453,10,10,10" />
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Servidor" Height="22" VerticalAlignment="Bottom">
+                    <Grid Background="#FFE5E5E5">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,0,362,0" HorizontalAlignment="Right">IP</Label>
+                                <StackPanel Margin="206,0,0,0" Grid.Column="1">
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBox x:Name="txtIPS1" Text="" PreviewKeyDown="txtIPS1_PreviewKeyDown" PreviewTextInput="txtIPS1_PreviewTextInput" TextChanged="txtIPC1_TextChanged" PreviewKeyUp="txtIPS1_PreviewKeyUp" MaxLength="3" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="1"></TextBlock>
+                                        <TextBox x:Name="txtIPS2" Grid.Column="2" Text="" KeyDown="txtIPS2_KeyDown" PreviewTextInput="txtIPS2_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" PreviewKeyUp="txtIPS2_PreviewKeyUp" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="3"></TextBlock>
+                                        <TextBox x:Name="txtIPS3" Grid.Column="4" Text="" KeyDown="txtIPS3_KeyDown" PreviewTextInput="txtIPS3_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" PreviewKeyUp="txtIPS3_PreviewKeyUp" Width="50" />
+                                        <TextBlock FontWeight="Bold" Text="." Grid.Column="5"></TextBlock>
+                                        <TextBox x:Name="txtIPS4" Grid.Column="6" Text="" PreviewTextInput="txtIPS4_PreviewTextInput" TextChanged="txtIPC1_TextChanged" MaxLength="3" Width="50" />
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" SharedSizeGroup="Label"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" RenderTransformOrigin="4.709,0.641" Grid.ColumnSpan="2" Margin="0,0,363,0" HorizontalAlignment="Right">Puerto</Label>
+                                <TextBox Grid.Column="1" Text=""  MaxLength="5" x:Name="txtPuertoServer" PreviewTextInput="txtPuertoServer_PreviewTextInput" Margin="206,0,0,0" TextChanged="txtPuertoServer_TextChanged"></TextBox>
+                            </Grid>
+                            <Button x:Name="btnSaveServer" Content="Guardar" Click="btnSaveServer_Click" Margin="453,10,10,10" />
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Usuarios" Height="22" VerticalAlignment="Bottom">
+                    <Grid Background="#FFE5E5E5" Height="193">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="281*"/>
+                            <ColumnDefinition Width="285*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="2">
+                            <Grid Height="193">
+                                <StackPanel Margin="0,0,326,0">
+                                    <Grid Margin="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Label Height="26" VerticalAlignment="Top">Usuario:</Label>
+                                        <TextBox x:Name="txtUser" CharacterCasing="Upper" Grid.Column="1" Margin="0,0,0,0"  />
+                                        <Label Grid.Row="1">Nombre Usuario:</Label>
+                                        <TextBox x:Name="txtNombre" CharacterCasing="Upper" Grid.Row="1" Grid.Column="1" Margin="0,0,0,0"  />
+                                        <Label Grid.Row="2" Height="28" VerticalAlignment="Bottom">Password:</Label>
+                                        <PasswordBox x:Name="txtPass" Grid.Row="2" Grid.Column="1" Height="28" MaxLength="10"/>
+                                        <Label Grid.Row="3">Tipo Usuario:</Label>
+                                        <ComboBox x:Name="cmbTipoUser"  Grid.Row="3" Grid.Column="1">
+                                            <ComboBoxItem Name="C1">Administrador</ComboBoxItem>
+                                            <ComboBoxItem Name="C2">Usuario</ComboBoxItem>
+                                        </ComboBox>
+                                        <Label Grid.Row="4">Sitio:</Label>
+                                        <ComboBox x:Name="cmbSitio" Loaded="cmbSitio_Loaded" Grid.Row="4" Grid.Column="1">
+                                        </ComboBox>
+                                    </Grid>
+                                    <Button x:Name="btnSaveUser" Content="Guardar" Margin="174,0,0,0" Click="btnSaveUser_Click"/>
+                                </StackPanel>
+                                <StackPanel Margin="245,0,0,0">
+                                    <Grid Margin="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="140" />
+                                        </Grid.RowDefinitions>
+                                        <Label Height="26" VerticalAlignment="Center" Margin="101,0,-101,0">Usuarios</Label>
+                                        <DataGrid Grid.Row="1" Name="dgUsuarios" Width="auto" Background="LightGray" RowBackground="LightYellow" RowHeight="30" IsReadOnly="True" SelectionChanged="dgUsuarios_SelectionChanged"
+                                                  SelectedItem="{Binding Path=SelectedclsConfiguracion, Mode=TwoWay}" ItemsSource="{Binding Path=clsConfiguracion}"
+                                                  VerticalAlignment="Top"  VerticalScrollBarVisibility="Visible" AlternatingRowBackground="LightBlue" AutoGenerateColumns="False"  Height="140" Margin="0,0,-247,0">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Usuario" Width="105" Binding="{Binding vchUsuario}">
+                                                </DataGridTextColumn>
+                                                <DataGridTextColumn Header="Nombre" Width="105" Binding="{Binding vchNombreUsuario}">
+                                                </DataGridTextColumn>
+                                                <DataGridCheckBoxColumn Header="Estatus" Width="50" Binding="{Binding bitActivo}">
+                                                </DataGridCheckBoxColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <Button x:Name="btnRunServ" Content="Reiniciar Servicio" Click="btnRunServ_Click" Margin="10,1,477,0"/>
+            <Button x:Name="btnSalir" Content="Salir" BorderBrush="Azure" Margin="487,-16,10,10" Click="btnSalir_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
