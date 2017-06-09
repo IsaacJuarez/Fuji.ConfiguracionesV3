@@ -77,6 +77,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -98,10 +99,51 @@
     <Compile Include="Configuracion.xaml.cs">
       <DependentUpon>Configuracion.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataAccessLocal\NapoleonAUX.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NapoleonAUX.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLocal\NapoleonAUX.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NapoleonAUX.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLocal\NapoleonAUX.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NapoleonAUX.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLocal\NapoleonAUXDataAccess.cs" />
+    <Compile Include="DataAccessLocal\tbl_CAT_EstatusAUX.cs">
+      <DependentUpon>NapoleonAUX.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLocal\tbl_CAT_ModalidadAUX.cs">
+      <DependentUpon>NapoleonAUX.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLocal\tbl_ConfigSitioAUX.cs">
+      <DependentUpon>NapoleonAUX.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLocal\tbl_DET_EstudioAUX.cs">
+      <DependentUpon>NapoleonAUX.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccessLocal\tbl_MST_EstudioAUX.cs">
+      <DependentUpon>NapoleonAUX.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataAccess\tbl_CAT_Extensiones.cs">
       <DependentUpon>dbConfig.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataAccess\tbl_CAT_TipoUsuario.cs">
+      <DependentUpon>dbConfig.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\tbl_CAT_Usuarios.cs">
+      <DependentUpon>dbConfig.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\tbl_ConfigSitio.cs">
+      <DependentUpon>dbConfig.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entidades\clsConfiguracion.cs" />
+    <Compile Include="Extensions\WaitCursor.cs" />
     <Compile Include="Extensions\XMLConfigurator.cs" />
     <Compile Include="Extensions\WMIHelper.cs" />
     <Compile Include="SitioName.xaml.cs">
@@ -133,15 +175,6 @@
     </Compile>
     <Compile Include="DataAccess\Helper.cs" />
     <Compile Include="DataAccess\LoginDataAccess.cs" />
-    <Compile Include="DataAccess\tbl_CAT_TipoUsuario.cs">
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\tbl_CAT_Usuarios.cs">
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\tbl_ConfigSitio.cs">
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
     <Compile Include="Extensions\Log.cs" />
     <Compile Include="Extensions\MaskIPTextbox.cs" />
     <Compile Include="Extensions\Security.cs" />
@@ -183,6 +216,13 @@
     <None Include="DataAccess\dbConfig.edmx.diagram">
       <DependentUpon>dbConfig.edmx</DependentUpon>
     </None>
+    <EntityDeploy Include="DataAccessLocal\NapoleonAUX.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>NapoleonAUX.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataAccessLocal\NapoleonAUX.edmx.diagram">
+      <DependentUpon>NapoleonAUX.edmx</DependentUpon>
+    </None>
     <None Include="Fuji.Configuraciones_ClaveTemporal.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -193,7 +233,9 @@
     <None Include="Theme\StyleSheet1.less" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -208,6 +250,16 @@
     <Resource Include="assets\fujifilm-logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataAccessLocal\NapoleonAUX.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>NapoleonAUX.edmx</DependentUpon>
+      <LastGenOutput>NapoleonAUX.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataAccessLocal\NapoleonAUX.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>NapoleonAUX.edmx</DependentUpon>
+      <LastGenOutput>NapoleonAUX.cs</LastGenOutput>
+    </Content>
     <Resource Include="assets\offline.png" />
     <Resource Include="assets\online.png" />
     <Resource Include="assets\WallPaperWhite.jpg" />

@@ -1,9 +1,12 @@
 ﻿using Fuji.Configuraciones.DataAccess;
+using Fuji.Configuraciones.DataAccessLocal;
 using Fuji.Configuraciones.Entidades;
 using Fuji.Configuraciones.Extensions;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -25,19 +28,29 @@ namespace Fuji.Configuraciones
         public static bool cambiosServer = false;
         public static bool cambiosCliente = false;
         public static bool inicio = true;
-        public tbl_ConfigSitio mdlSitio = new tbl_ConfigSitio();
-        public static List<tbl_ConfigSitio> lstSitios = new List<tbl_ConfigSitio>();
+        //public tbl_ConfigSitio mdlSitio = new tbl_ConfigSitio();
+        //public static List<tbl_ConfigSitio> lstSitios = new List<tbl_ConfigSitio>();
         private ConfiguracionDataAccess ConfigDA;
         private LoginDataAccess LoginDA;
         public static string vchUsuarioMaster = "";
-        public static int userID = 0;
+        public static string userID = "";
         public static string vchuserID = "";
         public static int intTipoUser = 0;
         public static int id_Sitio_Global = 0;
         public static bool bitEdicion = false;
         public static string ip_local_global = "";
+        public static string ip_Server_global = "";
         public static string Mask_local_global = "";
         public static int intUsuarioID = 0;
+        public static string vchClaveSitioGlobal = "";
+        public static string path = ConfigurationManager.AppSettings["ConfigDirectory"] != null ? ConfigurationManager.AppSettings["ConfigDirectory"].ToString() : "";
+        public static string IPServer = ConfigurationManager.AppSettings["IPServer"] != null ? ConfigurationManager.AppSettings["IPServer"].ToString() : "";
+        public static string PuertoServer = ConfigurationManager.AppSettings["PuertoServer"] != null ? ConfigurationManager.AppSettings["PuertoServer"].ToString() : "";
+        public static string ConfigRepository = ConfigurationManager.AppSettings["ConfigRepository"] != null ? ConfigurationManager.AppSettings["ConfigRepository"].ToString() : "";
+        public static string PuertoCliente = ConfigurationManager.AppSettings["PuertoCliente"] != null ? ConfigurationManager.AppSettings["PuertoCliente"].ToString() : "";
+        public static string AETitleServer = ConfigurationManager.AppSettings["AETitleServer"] != null ? ConfigurationManager.AppSettings["AETitleServer"].ToString() : "";
+        
+
 
 
         public static clsConfiguracion _conf;
@@ -52,109 +65,143 @@ namespace Fuji.Configuraciones
         {
             try
             {
-                InitializeComponent();
-
-                vchuserID = vchUsuarioLog;
-                txtUserActive.Text = "Usuario: " + vchuserID;
-                txtSitioActive.Text = "Sitio: " + vchClaveSitio;
-                txtIPS1.Text = "201";
-                txtIPS2.Text = "149";
-                txtIPS3.Text = "27";
-                txtIPS4.Text = "38";
-                txtPuertoServer.Text = "21";
-
-                intTipoUser = _tipeUser;
-                userID = userid;
-                _conf = new clsConfiguracion();
-                if (File.Exists("info.xml"))
+                using (new WaitCursor())
                 {
-                    _conf = XMLConfigurator.getXMLfile();
-                    if (_conf != null)
+                    InitializeComponent();
+                    vchClaveSitioGlobal = vchClaveSitio;
+                    vchuserID = vchUsuarioLog;
+                    txtUserActive.Text = "Usuario: " + vchuserID;
+                    txtSitioActive.Text = "Sitio: " + vchClaveSitio;
+                    txtIPS1.Text = "201";
+                    txtIPS2.Text = "149";
+                    txtIPS3.Text = "27";
+                    txtIPS4.Text = "38";
+                    txtPuertoServer.Text = "104";
+                    intTipoUser = _tipeUser;
+                    userID = vchuserID;
+                    ArrayList nicNames = WMIHelper.GetNICNames();
+                    if (nicNames.Count > 0)
                     {
-                        if (_conf.intTipoUsuario > 0)
+                        nickname = nicNames[0].ToString();
+                    }
+                    loadCurrentSetting(nickname);
+                    string ip_local = "";
+                    ip_local = Log.GetLocalIPAddress();
+                    if (ip_local != "")
+                    {
+                        ip_local_global = ip_local;
+                    }
+                    String maskg = "";
+                    maskg = Log.getSubnetAddres();
+                    if (maskg != "")
+                    {
+                        Mask_local_global = maskg;
+                    }
+                    _conf = new clsConfiguracion();
+                    if (File.Exists(path + "info.xml"))
+                    {
+                        _conf = XMLConfigurator.getXMLfile();
+                        if (_conf != null)
                         {
-                            if (_conf.intTipoUsuario == 1)
+                            if (_conf.intTipoUsuario > 0)
                             {
-                                foreach (TabItem item in tabControl.Items)
+                                if (_conf.intTipoUsuario == 1)
                                 {
-                                    if ((item as TabItem).Header.ToString() == "Usuarios")
+                                    foreach (TabItem item in tabControl.Items)
                                     {
-                                        (item as TabItem).IsEnabled = true;
+                                        if ((item as TabItem).Header.ToString() == "Usuarios")
+                                        {
+                                            (item as TabItem).IsEnabled = true;
+                                        }
                                     }
+                                    //cargarUsuarios();
                                 }
-                                cargarUsuarios();
-                            }
-                            else
-                            {
-                                foreach (TabItem item in tabControl.Items)
+                                else
                                 {
-                                    if ((item as TabItem).Header.ToString() == "Usuarios")
+                                    foreach (TabItem item in tabControl.Items)
                                     {
-                                        (item as TabItem).IsEnabled = false;
+                                        if ((item as TabItem).Header.ToString() == "Usuarios")
+                                        {
+                                            (item as TabItem).IsEnabled = false;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    //ConfigDA = new ConfiguracionDataAccess();
-                    string mensaje = "";
-                    if (intTipoUser == 1)
-                    {
-                        EnableControls(true);
-                        if (vchClaveSitio != "")
+                        //ConfigDA = new ConfiguracionDataAccess();
+                        string mensaje = "";
+                        if (intTipoUser == 1)
                         {
-                            txtClaveSitio.IsEnabled = false;
-                            txtAET.Text = "AE" + vchClaveSitio;
-                            getIP();
-
-                            //mdlSitio = ConfigDA.getConfiguracion(vchClaveSitio, ref mensaje);
-                            if (_conf != null && _conf.vchClaveSitio != "")
+                            EnableControls(true);
+                            if (vchClaveSitio != "")
                             {
-                                fillSitio(_conf);
+                                txtClaveSitio.IsEnabled = false;
+                                txtAET.Text = "AE" + vchClaveSitio;
+                                getIP();
+
+                                //mdlSitio = ConfigDA.getConfiguracion(vchClaveSitio, ref mensaje);
+                                if (_conf != null && _conf.vchClaveSitio != "")
+                                {
+                                    fillSitio(_conf);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Existe un error al consultar el sitio. " + mensaje);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (vchClaveSitio != "")
+                            {
+                                //mdlSitio = ConfigDA.getConfiguracion(vchClaveSitio, ref mensaje);
+                                if (_conf != null && _conf.vchClaveSitio != "")
+                                {
+                                    getIP();
+                                    fillSitio(_conf);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Existe un error al consultar el sitio. " + mensaje);
+                                }
                             }
                             else
                             {
-                                MessageBox.Show("Existe un error al consultar el sitio. " + mensaje);
+                                EnableControls(false);
                             }
                         }
                     }
                     else
                     {
-                        if (vchClaveSitio != "")
+                        string mensaje = "";
+                        ConfigDA = new ConfiguracionDataAccess();
+                        bool existe = ConfigDA.getVerificaSitio(vchClaveSitio, ref mensaje);
+                        if (existe)
                         {
-                            //mdlSitio = ConfigDA.getConfiguracion(vchClaveSitio, ref mensaje);
-                            if (_conf != null && _conf.vchClaveSitio != "")
+                            DataAccess.tbl_ConfigSitio mdl = new DataAccess.tbl_ConfigSitio();
+                            ConfigDA = new ConfiguracionDataAccess();
+                            mdl = ConfigDA.getConfiguracion(vchClaveSitio, ref mensaje);
+                            if (mdl != null)
                             {
-                                getIP();
-                                fillSitio(_conf);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Existe un error al consultar el sitio. " + mensaje);
+                                fillSitiodb(mdl);
+                                createFileXML(mdl);
+                                setCliente();
+                                setServer();
+                                string mesagge = "";
+                                DataAccessLocal.tbl_ConfigSitioAUX mdlComplete = new DataAccessLocal.tbl_ConfigSitioAUX();
+                                mdlComplete = obtenerSitioComplete(mdl);
+                                if (mdlComplete != null)
+                                {
+                                    NapoleonAUXDataAccess.setConfiguracion(mdlComplete, ref mesagge);
+                                }
                             }
                         }
                         else
                         {
-                            EnableControls(false);
+                            Log.EscribeLog("No existe configuración para este sitio " + vchClaveSitio);
+                            MessageBox.Show("No existe configuración para este sitio.", "Error");
                         }
                     }
-                }
-                else
-                {
-                    string mensaje = "";
-                    bool existe = ConfigDA.getVerificaSitio(vchClaveSitio, ref mensaje);
-                    if (existe)
-                    {
-                        tbl_ConfigSitio mdl = new tbl_ConfigSitio();
-                        mdl =  ConfigDA.getConfiguracion(vchClaveSitio, ref mensaje);
-                        if (mdl != null)
-                        {
-                            fillSitiodb(mdl);
-                            createFileXML(mdl);
-                            
-                        }
-                    }
-
                 }
                 //enableServer();
             }
@@ -165,7 +212,34 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private void createFileXML(tbl_ConfigSitio mdl)
+        private DataAccessLocal.tbl_ConfigSitioAUX obtenerSitioComplete(DataAccess.tbl_ConfigSitio mdlC)
+        {
+            DataAccessLocal.tbl_ConfigSitioAUX mdl = new DataAccessLocal.tbl_ConfigSitioAUX();
+            try
+            {
+                mdl.id_Sitio = mdlC.id_Sitio> 0 ? mdlC.id_Sitio : id_Sitio_Global;
+                mdl.bitActivo = true;
+                mdl.datFechaSistema = DateTime.Now;
+                mdl.intPuertoCliente = mdlC.intPuertoCliente > 0 ? mdlC.intPuertoCliente : Convert.ToInt32(txtPuertoCliente.ToString());
+                mdl.in_tPuertoServer = mdlC.in_tPuertoServer > 0 ? mdlC.in_tPuertoServer : Convert.ToInt32(txtPuertoServer.ToString());
+                mdl.vchAETitle = mdlC.vchAETitle != "" ? mdlC.vchAETitle : txtAET.Text.ToString();
+                mdl.vchAETitleServer = mdlC.vchAETitleServer != "" ? mdlC.vchAETitleServer : txtAETitleServer.Text.ToString();
+                mdl.vchClaveSitio = mdlC.vchClaveSitio != "" ? mdlC.vchClaveSitio : txtClaveSitio.Text.ToString();
+                mdl.vchIPCliente = mdlC.vchIPCliente != "" ? mdlC.vchIPCliente : (txtIPC1.Text.ToString() + "." + txtIPC2.Text.ToString() + "." + txtIPC3.Text.ToString() + "." + txtIPC4.Text.ToString());
+                mdl.vchIPServidor = mdlC.vchIPServidor != "" ? mdlC.vchIPServidor : (txtIPS1.Text.ToString() + "." + txtIPS2.Text.ToString() + "." + txtIPS3.Text.ToString() + "." + txtIPS4.Text.ToString());
+                mdl.vchMaskCliente = mdlC.vchMaskCliente != "" ? mdlC.vchMaskCliente : (txtMaskC1.Text.ToString() + "." + txtMaskC2.Text.ToString() + "." + txtMaskC3.Text.ToString() + "." + txtMaskC4.Text.ToString());
+                mdl.vchnombreSitio = mdlC.vchnombreSitio != "" ? mdlC.vchnombreSitio : txtNombreSitio.Text.ToString();
+                mdl.vchPathLocal = mdlC.vchPathLocal != "" ? mdlC.vchPathLocal : txtFolder.Text.ToString();
+                mdl.vchUserAdmin = mdl.vchUserAdmin != "" ? mdlC.vchUserAdmin : txtUserActive.Text.ToString();
+            }
+            catch(Exception eGO)
+            {
+                Log.EscribeLog("Existe un error en obtenerSitioComplete: " + eGO.Message);
+            }
+            return mdl;
+        }
+
+        private void createFileXML(DataAccess.tbl_ConfigSitio mdl)
         {
             try
             {
@@ -173,7 +247,9 @@ namespace Fuji.Configuraciones
                 formato = ConfigDA.getXMLFileConfig("XMLCONFIG");
                 if(formato!= "")
                 {
-                    System.IO.StreamWriter file = new System.IO.StreamWriter("info.xml");
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(path + "info.xml");
                     file.WriteLine(formato);
                     file.Close();
                 }
@@ -264,6 +340,8 @@ namespace Fuji.Configuraciones
                 txtNombreSitio.Text = mdlSitio.vchNombreSitio;
                 txtPuertoCliente.Text = mdlSitio.intPuertoCliente.ToString();
                 txtPuertoServer.Text = mdlSitio.intPuertoServer > 0 ? mdlSitio.intPuertoServer.ToString() : "";
+                txtAETitleServer.Text = mdlSitio.vchAETitleServer.ToString();
+                txtFolder.Text = mdlSitio.vchPathLocal;
             }
             catch (Exception efS)
             {
@@ -271,7 +349,7 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private void fillSitiodb(tbl_ConfigSitio mdlSitio)
+        private void fillSitiodb(DataAccess.tbl_ConfigSitio mdlSitio)
         {
             try
             {
@@ -296,6 +374,20 @@ namespace Fuji.Configuraciones
                         txtIPC4.Text = ipformato[3];
                     }
                 }
+                else
+                {
+                    if (ip_local_global != "")
+                    {
+                        string[] ipformato = ip_local_global.Split('.');
+                        if (ipformato.Count() > 0)
+                        {
+                            txtIPC1.Text = ipformato[0];
+                            txtIPC2.Text = ipformato[1];
+                            txtIPC3.Text = ipformato[2];
+                            txtIPC4.Text = ipformato[3];
+                        }
+                    }
+                }
 
                 if (mdlSitio.vchIPServidor != null && mdlSitio.vchIPServidor != "")
                 {
@@ -309,6 +401,21 @@ namespace Fuji.Configuraciones
                     }
                     makeping(mdlSitio.vchIPServidor);
                 }
+                else
+                {
+                    if (IPServer != "")
+                    {
+                        string[] ipformatoS = IPServer.Split('.');
+                        if (ipformatoS.Count() > 0)
+                        {
+                            txtIPS1.Text = ipformatoS[0];
+                            txtIPS2.Text = ipformatoS[1];
+                            txtIPS3.Text = ipformatoS[2];
+                            txtIPS4.Text = ipformatoS[3];
+                        }
+                        makeping(IPServer);
+                    }
+                }
                 if (mdlSitio.vchMaskCliente != null && mdlSitio.vchMaskCliente != "")
                 {
                     string[] maskformato = mdlSitio.vchMaskCliente.Split('.');
@@ -320,14 +427,31 @@ namespace Fuji.Configuraciones
                         txtMaskC4.Text = maskformato[3];
                     }
                 }
+                else
+                {
+                    if (Mask_local_global != "")
+                    {
+                        string[] maskformato = Mask_local_global.Split('.');
+                        if (maskformato.Count() > 0)
+                        {
+                            txtMaskC1.Text = maskformato[0];
+                            txtMaskC2.Text = maskformato[1];
+                            txtMaskC3.Text = maskformato[2];
+                            txtMaskC4.Text = maskformato[3];
+                        }
+                    }
+                }
 
-                txtNombreSitio.Text = mdlSitio.vchNombreSitio;
-                txtPuertoCliente.Text = mdlSitio.intPuertoCliente.ToString();
-                txtPuertoServer.Text = mdlSitio.intPuertoServer > 0 ? mdlSitio.intPuertoServer.ToString() : "";
+                txtNombreSitio.Text = mdlSitio.vchnombreSitio;
+                txtPuertoCliente.Text = mdlSitio.intPuertoCliente > 0 ? mdlSitio.intPuertoCliente.ToString() : (PuertoCliente != "" ? PuertoCliente : "");
+                txtPuertoServer.Text = mdlSitio.in_tPuertoServer > 0 ? mdlSitio.in_tPuertoServer.ToString() : (PuertoServer != "" ? PuertoServer : "");
+                txtAETitleServer.Text = AETitleServer;
+                txtAET.Text = mdlSitio.vchAETitle;
+                txtFolder.Text = ConfigRepository;
             }
             catch (Exception efS)
             {
-                throw efS;
+                Log.EscribeLog("Existe un error en fillSitiodb: " + efS.Message);
             }
         }
 
@@ -357,7 +481,7 @@ namespace Fuji.Configuraciones
         {
             try
             {
-                txtClaveSitio.IsEnabled = _activar;
+                txtClaveSitio.IsEnabled = false;
                 txtIPC1.IsEnabled = _activar;
                 txtIPC2.IsEnabled = _activar;
                 txtIPC3.IsEnabled = _activar;
@@ -389,8 +513,10 @@ namespace Fuji.Configuraciones
         {
             try
             {
-
-                
+                using (new WaitCursor())
+                {
+                    setCliente();
+                }
             }
             catch (Exception eSC)
             {
@@ -407,21 +533,26 @@ namespace Fuji.Configuraciones
                     ConfigDA = new ConfiguracionDataAccess();
                     clsConfiguracion mdl = new clsConfiguracion();
                     string mensaje = "";
-                    int id_Sitio = 0;
                     mdl = obtenerCliente();
                     if (mdl != null)
                     {
                         bool success = false;
+                        bool successDBServer = false;
                         //if (mdl.id_Sitio > 0)
                         //{
-                        //success = ConfigDA.updateConfiguracion(mdl, ref mensaje);
+                        ConfigDA = new ConfiguracionDataAccess();
+                        successDBServer = ConfigDA.updateConfiguracion(mdl, ref mensaje);
+                        if(!successDBServer)
+                        {
+                            Log.EscribeLog("No  se pudo almacenar la configuración para el cliente del sitio: " + mdl.vchClaveSitio + " , error:" + mensaje);
+                        }
+                        mensaje = "";
                         success = XMLConfigurator.setConfiguracionClienteXML(mdl, ref mensaje);
                         if (success)
                         {
                             cambiosCliente = false;
-                            enableServer();
+                            //enableServer();
                             string ipcliente = txtIPC1.Text + "." + txtIPC2.Text + "." + txtIPC3.Text + "." + txtIPC4.Text;
-                            id_Sitio_Global = id_Sitio;
                             string maskCliente = txtMaskC1.Text + "." + txtMaskC2.Text + "." + txtMaskC3.Text + "." + txtMaskC4.Text;
                             if (maskCliente != Mask_local_global || ip_local_global != ipcliente)
                             {
@@ -471,7 +602,7 @@ namespace Fuji.Configuraciones
                 mdl.vchMaskCliente = MaskCliente;
 
                 mdl.vchAETitle = txtAET.Text;
-
+                
                 mdl.intPuertoCliente = Convert.ToInt32(txtPuertoCliente.Text);
                 mdl.vchUserChanges = userID;
                 mdl.datFechaSistema = DateTime.Now;
@@ -480,6 +611,7 @@ namespace Fuji.Configuraciones
                 {
                     mdl.id_Sitio = id_Sitio_Global;
                 }
+                mdl.vchPathLocal = txtFolder.Text;
             }
             catch (Exception eOC)
             {
@@ -582,6 +714,19 @@ namespace Fuji.Configuraciones
                     MessageBox.Show("Capturar una mascara de red para el sitio. Revisar formato de red.", "Advertencia:");
                     return false;
                 }
+                if (txtFolder.Text == "")
+                {
+                    MessageBox.Show("Seleccionar un folder para el repositorio SCP", "Advertencia:");
+                    return false;
+                }
+                else
+                {
+                    if(!Directory.Exists(txtFolder.Text))
+                    {
+                        MessageBox.Show("El directorio seleccionado para el path no existe.", "Advertencia:");
+                        return false;
+                    }
+                }
             }
             catch (Exception eSC)
             {
@@ -619,19 +764,40 @@ namespace Fuji.Configuraciones
         {
             try
             {
+                using (new WaitCursor())
+                {
+                    setServer();
+                }
+            }
+            catch (Exception eSC)
+            {
+                MessageBox.Show("Existe un error, favor de verificar: " + eSC.Message);
+            }
+        }
+
+        private void setServer()
+        {
+            try
+            {
                 if (validaServer())
                 {
                     clsConfiguracion mdlServer = new clsConfiguracion();
-                    if (id_Sitio_Global > 0)
+                    if (vchClaveSitioGlobal != "")
                     {
                         mdlServer = obtenerServer();
                         bool success = false;
+                        bool successDBServer = false;
                         string mensaje = "";
-                        //success = ConfigDA.updateConfiguracionServer(mdlServer,ref mensaje);
+                        ConfigDA = new ConfiguracionDataAccess();
+                        successDBServer = ConfigDA.updateConfiguracionServer(mdlServer,ref mensaje);
+                        if(!successDBServer)
+                        {
+                            Log.EscribeLog("No  se pudo almacenar la configuración para el servidor del sitio: " + mdlServer.vchClaveSitio + " , error:" + mensaje);
+                        }
                         success = XMLConfigurator.setConfiguracionServerXML(mdlServer, ref mensaje);
                         if (success)
                         {
-                            enableServer();
+                            //enableServer();
                             makeping(mdlServer.vchIPServidor);
                             cambiosServer = false;
                             MessageBox.Show("Cambios correctos.", "Exito");
@@ -647,9 +813,9 @@ namespace Fuji.Configuraciones
                     }
                 }
             }
-            catch (Exception eSC)
+            catch(Exception ess)
             {
-                MessageBox.Show("Existe un error, favor de verificar: " + eSC.Message);
+                MessageBox.Show("Existe un error en setServer: " + ess.Message);
             }
         }
 
@@ -666,6 +832,8 @@ namespace Fuji.Configuraciones
                 ipServer = ipServer + (txtIPS4.Text == "" ? "" : txtIPS4.Text);
                 mdl.vchIPServidor = ipServer;
                 mdl.intPuertoServer = Convert.ToInt32(txtPuertoServer.Text);
+                mdl.vchAETitleServer = txtAETitleServer.Text;
+                mdl.vchClaveSitio = vchClaveSitioGlobal;
             }
             catch (Exception eoS)
             {
@@ -905,153 +1073,153 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private void cargarUsuarios()
-        {
-            try
-            {
-                List<clsConfiguracion> _lstUsers = new List<clsConfiguracion>();
-                _lstUsers.Add(_conf);
-                //LoginDA = new LoginDataAccess();
-                //_lstUsers = LoginDA.getUsuarios();
-                if (_lstUsers != null)
-                {
-                    if (_lstUsers.Count > 0)
-                    {
-                        dgUsuarios.ItemsSource = _lstUsers;
-                        dgUsuarios.AutoGenerateColumns = false;
-                    }
-                }
-            }
-            catch (Exception eCU)
-            {
-                throw eCU;
-            }
-        }
+        //private void cargarUsuarios()
+        //{
+        //    try
+        //    {
+        //        List<clsConfiguracion> _lstUsers = new List<clsConfiguracion>();
+        //        _lstUsers.Add(_conf);
+        //        //LoginDA = new LoginDataAccess();
+        //        //_lstUsers = LoginDA.getUsuarios();
+        //        if (_lstUsers != null)
+        //        {
+        //            if (_lstUsers.Count > 0)
+        //            {
+        //                dgUsuarios.ItemsSource = _lstUsers;
+        //                dgUsuarios.AutoGenerateColumns = false;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception eCU)
+        //    {
+        //        throw eCU;
+        //    }
+        //}
 
-        private void btnSaveUser_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (validaUsuarios())
-                {
-                    clsConfiguracion mdlReq = new clsConfiguracion();
-                    string mensaje = "";
-                    mdlReq = obtenerUsuario();
-                    LoginDA = new LoginDataAccess();
-                    bool success = false;
-                    //if (intUsuarioID > 0)
-                    //{
+        //private void btnSaveUser_Click(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (validaUsuarios())
+        //        {
+        //            clsConfiguracion mdlReq = new clsConfiguracion();
+        //            string mensaje = "";
+        //            mdlReq = obtenerUsuario();
+        //            LoginDA = new LoginDataAccess();
+        //            bool success = false;
+        //            //if (intUsuarioID > 0)
+        //            //{
 
-                    //success = LoginDA.ActualizarUsuario(mdlReq, ref mensaje);
-                    success = XMLConfigurator.setConfiguracionUsuarioXML(mdlReq, ref mensaje);
-                    if (success)
-                    {
-                        MessageBox.Show(mensaje, "Mensaje:");
-                        limpiarControlUser();
-                        cargarUsuarios();
-                    }
-                    else
-                    {
-                        MessageBox.Show(mensaje, "Error:");
-                    }
-                    //}
-                    //else
-                    //{
-                    //    //success = LoginDA.AgregarUsuario(mdlReq, ref mensaje);
-                    //    success = XMLConfigurator.setConfiguracionUsuarioXML()
-                    //    if (success)
-                    //    {
-                    //        MessageBox.Show(mensaje, "Mensaje:");
-                    //        limpiarControlUser();
-                    //        cargarUsuarios();
-                    //    }
-                    //    else
-                    //    {
-                    //        MessageBox.Show(mensaje, "Error:");
-                    //    }
-                    //}
-                }
-            }
-            catch (Exception eBSU)
-            {
-                MessageBox.Show("Existe un erro al guardar los cambios: " + eBSU.Message);
-            }
-        }
+        //            //success = LoginDA.ActualizarUsuario(mdlReq, ref mensaje);
+        //            success = XMLConfigurator.setConfiguracionUsuarioXML(mdlReq, ref mensaje);
+        //            if (success)
+        //            {
+        //                MessageBox.Show(mensaje, "Mensaje:");
+        //                limpiarControlUser();
+        //                cargarUsuarios();
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show(mensaje, "Error:");
+        //            }
+        //            //}
+        //            //else
+        //            //{
+        //            //    //success = LoginDA.AgregarUsuario(mdlReq, ref mensaje);
+        //            //    success = XMLConfigurator.setConfiguracionUsuarioXML()
+        //            //    if (success)
+        //            //    {
+        //            //        MessageBox.Show(mensaje, "Mensaje:");
+        //            //        limpiarControlUser();
+        //            //        cargarUsuarios();
+        //            //    }
+        //            //    else
+        //            //    {
+        //            //        MessageBox.Show(mensaje, "Error:");
+        //            //    }
+        //            //}
+        //        }
+        //    }
+        //    catch (Exception eBSU)
+        //    {
+        //        MessageBox.Show("Existe un erro al guardar los cambios: " + eBSU.Message);
+        //    }
+        //}
 
-        private void limpiarControlUser()
-        {
-            try
-            {
-                txtUser.Text = "";
-                txtNombre.Text = "";
-                txtPass.Password = "";
-                cmbTipoUser.SelectedIndex = -1;
-                intUsuarioID = 0;
-            }
-            catch (Exception eLCU)
-            {
-                throw eLCU;
-            }
-        }
+        //private void limpiarControlUser()
+        //{
+        //    try
+        //    {
+        //        txtUser.Text = "";
+        //        txtNombre.Text = "";
+        //        txtPass.Password = "";
+        //        cmbTipoUser.SelectedIndex = -1;
+        //        intUsuarioID = 0;
+        //    }
+        //    catch (Exception eLCU)
+        //    {
+        //        throw eLCU;
+        //    }
+        //}
 
-        private clsConfiguracion obtenerUsuario()
-        {
-            clsConfiguracion mdl = new clsConfiguracion();
-            try
-            {
-                mdl.vchUsuario = txtUser.Text;
-                mdl.vchNombreUsuario = txtNombre.Text;
-                mdl.vchPassword = Extensions.Security.Encrypt(txtPass.Password);
-                mdl.intTipoUsuario = cmbTipoUser.Text.ToString().ToUpper() == "ADMINISTRADOR" ? 1 : 2;
-                mdl.id_Sitio = lstSitios.First(x => x.vchClaveSitio == cmbSitio.Text.ToString()).id_Sitio;
-                mdl.bitActivo = true;
-                //mdl.datFecha = DateTime.Now;
-                //mdl.vchUserAdmin = vchUsuarioMaster;
-                //if(intUsuarioID > 0)
-                //{
-                //    mdl.intUsuarioID = intUsuarioID;
-                //}
-            }
-            catch (Exception eoU)
-            {
-                mdl = null;
-                throw eoU;
-            }
-            return mdl;
-        }
+        //private clsConfiguracion obtenerUsuario()
+        //{
+        //    clsConfiguracion mdl = new clsConfiguracion();
+        //    try
+        //    {
+        //        mdl.vchUsuario = txtUser.Text;
+        //        mdl.vchNombreUsuario = txtNombre.Text;
+        //        mdl.vchPassword = Extensions.Security.Encrypt(txtPass.Password);
+        //        mdl.intTipoUsuario = cmbTipoUser.Text.ToString().ToUpper() == "ADMINISTRADOR" ? 1 : 2;
+        //        mdl.id_Sitio = lstSitios.First(x => x.vchClaveSitio == cmbSitio.Text.ToString()).id_Sitio;
+        //        mdl.bitActivo = true;
+        //        //mdl.datFecha = DateTime.Now;
+        //        //mdl.vchUserAdmin = vchUsuarioMaster;
+        //        //if(intUsuarioID > 0)
+        //        //{
+        //        //    mdl.intUsuarioID = intUsuarioID;
+        //        //}
+        //    }
+        //    catch (Exception eoU)
+        //    {
+        //        mdl = null;
+        //        throw eoU;
+        //    }
+        //    return mdl;
+        //}
 
-        private bool validaUsuarios()
-        {
-            bool valido = true;
-            try
-            {
-                if (txtUser.Text.Trim() == "")
-                {
-                    MessageBox.Show("Capturar un usuario.", "Advertencia:");
-                    return false;
-                }
-                if (txtNombre.Text.Trim() == "")
-                {
-                    MessageBox.Show("Capturar un Nombre.", "Advertencia:");
-                    return false;
-                }
-                if (txtPass.Password.Trim() == "")
-                {
-                    MessageBox.Show("Capturar una contraseña.", "Advertencia:");
-                    return false;
-                }
-                if (cmbTipoUser.Text.Trim() == "")
-                {
-                    MessageBox.Show("Capturar un tipo de usuario.", "Advertencia:");
-                    return false;
-                }
-            }
-            catch (Exception eVU)
-            {
-                throw eVU;
-            }
-            return valido;
-        }
+        //private bool validaUsuarios()
+        //{
+        //    bool valido = true;
+        //    try
+        //    {
+        //        if (txtUser.Text.Trim() == "")
+        //        {
+        //            MessageBox.Show("Capturar un usuario.", "Advertencia:");
+        //            return false;
+        //        }
+        //        if (txtNombre.Text.Trim() == "")
+        //        {
+        //            MessageBox.Show("Capturar un Nombre.", "Advertencia:");
+        //            return false;
+        //        }
+        //        if (txtPass.Password.Trim() == "")
+        //        {
+        //            MessageBox.Show("Capturar una contraseña.", "Advertencia:");
+        //            return false;
+        //        }
+        //        if (cmbTipoUser.Text.Trim() == "")
+        //        {
+        //            MessageBox.Show("Capturar un tipo de usuario.", "Advertencia:");
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception eVU)
+        //    {
+        //        throw eVU;
+        //    }
+        //    return valido;
+        //}
 
         private void txtIPC1_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -1566,39 +1734,39 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private void cmbSitio_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                List<tbl_ConfigSitio> _lst = new List<tbl_ConfigSitio>();
-                List<string> data = new List<string>();
-                LoginDA = new LoginDataAccess();
-                _lst = LoginDA.getSitios();
-                lstSitios = _lst;
-                if (_lst != null)
-                {
-                    if (_lst.Count > 0)
-                    {
-                        foreach (tbl_ConfigSitio item in _lst)
-                        {
-                            data.Add(item.vchClaveSitio);
-                        }
-                    }
-                }
-                // ... Obtiene la referencia del combo.
-                var comboBox = sender as ComboBox;
+        //private void cmbSitio_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        List<tbl_ConfigSitio> _lst = new List<tbl_ConfigSitio>();
+        //        List<string> data = new List<string>();
+        //        LoginDA = new LoginDataAccess();
+        //        _lst = LoginDA.getSitios();
+        //        lstSitios = _lst;
+        //        if (_lst != null)
+        //        {
+        //            if (_lst.Count > 0)
+        //            {
+        //                foreach (tbl_ConfigSitio item in _lst)
+        //                {
+        //                    data.Add(item.vchClaveSitio);
+        //                }
+        //            }
+        //        }
+        //        // ... Obtiene la referencia del combo.
+        //        var comboBox = sender as ComboBox;
 
-                // ... Se asigna el itemsource.
-                comboBox.ItemsSource = data;
+        //        // ... Se asigna el itemsource.
+        //        comboBox.ItemsSource = data;
 
-                // ... Se selecciona el primer elemento.
-                comboBox.SelectedIndex = 0;
-            }
-            catch (Exception eCS)
-            {
-                MessageBox.Show("Existe un error al cargar el combo: " + eCS.Message, "Error");
-            }
-        }
+        //        // ... Se selecciona el primer elemento.
+        //        comboBox.SelectedIndex = 0;
+        //    }
+        //    catch (Exception eCS)
+        //    {
+        //        MessageBox.Show("Existe un error al cargar el combo: " + eCS.Message, "Error");
+        //    }
+        //}
 
         /// <summary>
 		/// Loads current network configuration for the specified NIC and show in 
@@ -1653,8 +1821,8 @@ namespace Fuji.Configuraciones
                 string mask_local = "";
                 string mask_local1 = "";
                 mask_local1 = Log.getSubnetAddres();
-                string[] datos = mask_local1.Split('|');
-                mask_local = datos[0];
+                string datos = mask_local1;
+                mask_local = datos;
                 if (mask_local != "")
                 {
                     Mask_local_global = mask_local;
@@ -1687,59 +1855,154 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private void dgUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                tbl_CAT_Usuarios usuario = (tbl_CAT_Usuarios)dgUsuarios.SelectedItem;
-                if (usuario != null)
-                {
-                    intUsuarioID = usuario.intUsuarioID;
-                    txtNombre.Text = usuario.vchNombre;
-                    txtUser.Text = usuario.vchUsuario;
-                    txtPass.Password = Security.Decrypt(usuario.vchPassword);
-                    cmbTipoUser.SelectedIndex = usuario.intTipoUsuarioID == 1 ? 0 : 1;
-                    string vchSitio = lstSitios.First(x => x.id_Sitio == usuario.id_Sitio).vchClaveSitio;
-                    cmbSitio.SelectedValue = vchSitio;
-                }
-            }
-            catch (Exception eSC)
-            {
-                Log.EscribeLog("Existe un error al obtener la información del Usuario seleccionado: " + eSC.Message);
-            }
-        }
+        //private void dgUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        tbl_CAT_Usuarios usuario = (tbl_CAT_Usuarios)dgUsuarios.SelectedItem;
+        //        if (usuario != null)
+        //        {
+        //            intUsuarioID = usuario.intUsuarioID;
+        //            txtNombre.Text = usuario.vchNombre;
+        //            txtUser.Text = usuario.vchUsuario;
+        //            txtPass.Password = Security.Decrypt(usuario.vchPassword);
+        //            cmbTipoUser.SelectedIndex = usuario.intTipoUsuarioID == 1 ? 0 : 1;
+        //            string vchSitio = lstSitios.First(x => x.id_Sitio == usuario.id_Sitio).vchClaveSitio;
+        //            cmbSitio.SelectedValue = vchSitio;
+        //        }
+        //    }
+        //    catch (Exception eSC)
+        //    {
+        //        Log.EscribeLog("Existe un error al obtener la información del Usuario seleccionado: " + eSC.Message);
+        //    }
+        //}
 
         private void btnRunServ_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string nombreServicio = "ListenerSCPService";
-                ServiceController c = new ServiceController(nombreServicio);
-                int timeoutMilisegundos = 5000;
-                TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilisegundos);
-                try
+                using (new WaitCursor())
                 {
-                    if (c != null && c.Status == ServiceControllerStatus.Running)
-                    {
-                        c.Stop();
-                        c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
-                    }
-                    c.Refresh();
-                    if (c != null && c.Status == ServiceControllerStatus.Stopped)
-                    {
-                        c.Start();
-                        c.WaitForStatus(ServiceControllerStatus.Running, timeout);
-                    }
+                    ListenerService();
+                    SyncService();
+                    SenderService();
+                    MessageBox.Show("Servicios Reiniciados.");
                 }
-                catch (Exception ex)
-                {
-                    Log.EscribeLog("Existe un error al iniciar servicio: " + ex.Message);
-                }
-                MessageBox.Show("Servicio Reiniciado.");
             }
             catch (Exception ebR)
             {
+                Log.EscribeLog("Existe un error en btnRunServ_Click: " + ebR.Message);
                 MessageBox.Show("Existe un error al reiniciar el servicio SCP: " + ebR.Message);
+            }
+        }
+
+        private void SenderService()
+        {
+            string nombreServicio = "SenderFeed2SCUService";
+            ServiceController c = new ServiceController(nombreServicio);
+            int timeoutMilisegundos = 5000;
+            TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilisegundos);
+            try
+            {
+                if (c != null && c.Status == ServiceControllerStatus.Running)
+                {
+                    c.Stop();
+                    c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    Log.EscribeLog("SenderFeed2SCUService Detenido.");
+                }
+                c.Refresh();
+                if (c != null && c.Status == ServiceControllerStatus.Stopped)
+                {
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("SenderFeed2SCUService Iniciado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribeLog("Existe un error al iniciar servicio: " + ex.Message);
+            }
+        }
+
+        private void SyncService()
+        {
+            string nombreServicio = "SyncFeed2Service";
+            ServiceController c = new ServiceController(nombreServicio);
+            int timeoutMilisegundos = 5000;
+            TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilisegundos);
+            try
+            {
+                if (c != null && c.Status == ServiceControllerStatus.Running)
+                {
+                    c.Stop();
+                    c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    Log.EscribeLog("SyncFeed2Service Detenido.");
+                }
+                c.Refresh();
+                if (c != null && c.Status == ServiceControllerStatus.Stopped)
+                {
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("SyncFeed2Service Iniciado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribeLog("Existe un error al iniciar servicio: " + ex.Message);
+            }
+        }
+
+        private void ListenerService()
+        {
+            string nombreServicio = "ListenerSCPService";
+            ServiceController c = new ServiceController(nombreServicio);
+            int timeoutMilisegundos = 5000;
+            TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilisegundos);
+            try
+            {
+                if (c != null && c.Status == ServiceControllerStatus.Running)
+                {
+                    c.Stop();
+                    c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    Log.EscribeLog("ListenerSCPService Detenido.");
+                }
+                if (c != null && c.Status == ServiceControllerStatus.Paused)
+                {
+                    c.Stop();
+                    c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    Log.EscribeLog("ListenerSCPService Detenido.");
+                }
+                c.Refresh();
+                if (c != null && c.Status == ServiceControllerStatus.Stopped)
+                {
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("ListenerSCPService Iniciado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribeLog("Existe un error al iniciar servicio: " + ex.Message);
+            }
+        }
+
+        private void btnFolder_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
+                {
+                    System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+
+                    if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        txtFolder.Text = fbd.SelectedPath;
+                    }
+                }
+            }
+            catch(Exception eFolder)
+            {
+                Log.EscribeLog("Existe un error al obtener la carpeta de escritura: " + eFolder.Message);
             }
         }
     }

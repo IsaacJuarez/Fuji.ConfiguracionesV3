@@ -38,10 +38,10 @@ namespace Fuji.Configuraciones
                         ConfigDA = new ConfiguracionDataAccess();
                         tbl_ConfigSitio mdl = new tbl_ConfigSitio();
                         mdl.vchClaveSitio = txtSitio.Text.Trim().ToUpper();
-                        mdl.vchNombreSitio = txtNombre.Text.ToUpper();
+                        mdl.vchnombreSitio = txtNombre.Text.ToUpper();
                         mdl.bitActivo = true;
                         mdl.datFechaSistema = DateTime.Now;
-                        mdl.vchUserChanges = 1;
+                        mdl.vchUserAdmin = "ADMINISTRADOR";
                         bool success = false;
                         string mensaje = "";
                         int id_sitio = 0;

@@ -16,23 +16,25 @@
       <PropertyRef Name="intTipoUsuarioID" />
     </Key>
     <Property Name="intTipoUsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="vchDescripcion" Type="varchar" MaxLength="200" Nullable="false" />
-    <Property Name="bitEstatus" Type="bit" Nullable="false" />
-    <Property Name="datFecha" Type="datetime" Nullable="false" />
-    <Property Name="vchUserAdmin" Type="varchar" MaxLength="100" />
+    <Property Name="vchTipoUsuario" Type="varchar" MaxLength="200" />
+    <Property Name="bitEstatus" Type="bit" />
+    <Property Name="datFecha" Type="datetime" />
+    <Property Name="vchUserAdmin" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="tbl_CAT_Usuarios">
     <Key>
       <PropertyRef Name="intUsuarioID" />
     </Key>
     <Property Name="intUsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="intTipoUsuarioID" Type="int" Nullable="false" />
-    <Property Name="vchNombre" Type="varchar" MaxLength="200" Nullable="false" />
-    <Property Name="vchUsuario" Type="varchar" MaxLength="200" Nullable="false" />
-    <Property Name="vchPassword" Type="varchar" MaxLength="200" Nullable="false" />
-    <Property Name="bitActivo" Type="bit" Nullable="false" />
-    <Property Name="datFecha" Type="datetime" Nullable="false" />
-    <Property Name="vchUserAdmin" Type="varchar" MaxLength="100" />
+    <Property Name="intTipoUsuarioID" Type="int" />
+    <Property Name="intProyectoID" Type="int" />
+    <Property Name="vchNombre" Type="varchar" MaxLength="200" />
+    <Property Name="vchApellido" Type="varchar" MaxLength="200" />
+    <Property Name="vchUsuario" Type="varchar" MaxLength="200" />
+    <Property Name="vchPassword" Type="varchar" MaxLength="200" />
+    <Property Name="bitActivo" Type="bit" />
+    <Property Name="datFecha" Type="datetime" />
+    <Property Name="vchUserAdmin" Type="varchar" MaxLength="200" />
     <Property Name="id_Sitio" Type="int" />
   </EntityType>
   <EntityType Name="tbl_ConfigSitio">
@@ -40,20 +42,22 @@
       <PropertyRef Name="id_Sitio" />
     </Key>
     <Property Name="id_Sitio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="vchClaveSitio" Type="varchar" MaxLength="200" Nullable="false" />
-    <Property Name="vchNombreSitio" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="vchClaveSitio" Type="varchar" MaxLength="200" />
+    <Property Name="vchnombreSitio" Type="varchar" MaxLength="200" />
     <Property Name="vchIPCliente" Type="varchar" MaxLength="200" />
     <Property Name="vchMaskCliente" Type="varchar" MaxLength="200" />
     <Property Name="intPuertoCliente" Type="int" />
-    <Property Name="vchIPServidor" Type="varchar" MaxLength="200" />
-    <Property Name="intPuertoServer" Type="int" />
-    <Property Name="datFechaSistema" Type="datetime" />
-    <Property Name="vchUserChanges" Type="int" />
     <Property Name="vchAETitle" Type="varchar" MaxLength="200" />
+    <Property Name="vchPathLocal" Type="varchar" MaxLength="200" />
+    <Property Name="vchIPServidor" Type="varchar" MaxLength="200" />
+    <Property Name="in_tPuertoServer" Type="int" />
+    <Property Name="vchAETitleServer" Type="varchar" MaxLength="200" />
+    <Property Name="datFechaSistema" Type="datetime" />
+    <Property Name="vchUserAdmin" Type="varchar" MaxLength="200" />
     <Property Name="bitActivo" Type="bit" />
   </EntityType>
   <Association Name="FK_CAT_TipoUsuarios_CAT_Usuarios">
-    <End Role="tbl_CAT_TipoUsuario" Type="Self.tbl_CAT_TipoUsuario" Multiplicity="1" />
+    <End Role="tbl_CAT_TipoUsuario" Type="Self.tbl_CAT_TipoUsuario" Multiplicity="0..1" />
     <End Role="tbl_CAT_Usuarios" Type="Self.tbl_CAT_Usuarios" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="tbl_CAT_TipoUsuario">
@@ -64,7 +68,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ConfigSitio_CAT_Usuarios">
+  <Association Name="FK_ConfigSitio_CAT_Usuario">
     <End Role="tbl_ConfigSitio" Type="Self.tbl_ConfigSitio" Multiplicity="0..1" />
     <End Role="tbl_CAT_Usuarios" Type="Self.tbl_CAT_Usuarios" Multiplicity="*" />
     <ReferentialConstraint>
@@ -85,7 +89,7 @@
       <End Role="tbl_CAT_TipoUsuario" EntitySet="tbl_CAT_TipoUsuario" />
       <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
     </AssociationSet>
-    <AssociationSet Name="FK_ConfigSitio_CAT_Usuarios" Association="Self.FK_ConfigSitio_CAT_Usuarios">
+    <AssociationSet Name="FK_ConfigSitio_CAT_Usuario" Association="Self.FK_ConfigSitio_CAT_Usuario">
       <End Role="tbl_ConfigSitio" EntitySet="tbl_ConfigSitio" />
       <End Role="tbl_CAT_Usuarios" EntitySet="tbl_CAT_Usuarios" />
     </AssociationSet>

@@ -1,6 +1,7 @@
 ﻿using Fuji.Configuraciones.Entidades;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,19 +11,22 @@ namespace Fuji.Configuraciones.Extensions
 {
     public class XMLConfigurator
     {
+        public static string path = ConfigurationManager.AppSettings["ConfigDirectory"] != null ? ConfigurationManager.AppSettings["ConfigDirectory"].ToString() : "";
         public static clsConfiguracion getXMLfile()
         {
             clsConfiguracion _config = new clsConfiguracion();
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load("info.xml");
+                doc.Load(path + "info.xml");
 
                 XmlNode node = doc.DocumentElement.SelectSingleNode("/Configuraciones/sitio");
                 //Sitio
+                _config.id_Sitio = node["id_Sitio"]?.InnerText != "" ? Convert.ToInt32(node["id_Sitio"]?.InnerText) : 0;
                 _config.vchClaveSitio = node["claveSitio"]?.InnerText;
                 _config.vchNombreSitio = node["NombreSitio"]?.InnerText;
                 _config.vchAETitle = node["AETitle"]?.InnerText;
+                _config.vchPathLocal = node["vchPathLocal"].InnerText;
                 _config.bitActivo = node["Activo"]?.InnerText == "1" ? true : false;
                 //Local
                 XmlNode nodeL = doc.DocumentElement.SelectSingleNode("/Configuraciones/sitio/hostLocal");
@@ -34,6 +38,7 @@ namespace Fuji.Configuraciones.Extensions
                 XmlNode nodeS = doc.DocumentElement.SelectSingleNode("/Configuraciones/sitio/hostServer");
                 _config.vchIPServidor = nodeS["ip"]?.InnerText;
                 _config.intPuertoServer = nodeS["puerto"]?.InnerText != "" ? Convert.ToInt32(nodeS["puerto"]?.InnerText) : 0;
+                _config.vchAETitleServer = nodeS["AETitleServer"].InnerText;
 
                 //Usuario
                 XmlNode nodeUser = doc.DocumentElement.SelectSingleNode("/Configuraciones/User");
@@ -55,19 +60,21 @@ namespace Fuji.Configuraciones.Extensions
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load("info.xml");
+                doc.Load(path + "info.xml");
                 XmlNode node = doc.DocumentElement.SelectSingleNode("/Configuraciones/sitio");
                 //Sitio
+                node["id_Sitio"].InnerText = _config.id_Sitio.ToString();
                 node["claveSitio"].InnerText = _config.vchClaveSitio;
                 node["claveSitio"].InnerText = _config.vchClaveSitio;
                 node["NombreSitio"].InnerText = _config.vchNombreSitio;
                 node["AETitle"].InnerText = _config.vchAETitle;
+                node["vchPathLocal"].InnerText = _config.vchPathLocal;
                 node["Activo"].InnerText = "1";
                 XmlNode nodeL = doc.DocumentElement.SelectSingleNode("/Configuraciones/sitio/hostLocal");
                 nodeL["ip"].InnerText = _config.vchIPCliente;
                 nodeL["mask"].InnerText = _config.vchMaskCliente;
                 nodeL["puerto"].InnerText = _config.intPuertoCliente.ToString();
-                doc.Save("info.xml");
+                doc.Save(path + "info.xml");
                 valido = true;
             }
             catch(Exception esC)
@@ -85,12 +92,13 @@ namespace Fuji.Configuraciones.Extensions
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load("info.xml");
+                doc.Load(path + "info.xml");
                 //Server
                 XmlNode nodeS = doc.DocumentElement.SelectSingleNode("/Configuraciones/sitio/hostServer");
-                nodeS["ip"].InnerText = _config.vchIPCliente;
-                nodeS["puerto"].InnerText = _config.intPuertoCliente.ToString();
-                doc.Save("info.xml");
+                nodeS["ip"].InnerText = _config.vchIPServidor;
+                nodeS["puerto"].InnerText = _config.intPuertoServer.ToString();
+                nodeS["AETitleServer"].InnerText = _config.vchAETitleServer;
+                doc.Save(path + "info.xml");
                 valido = true;
             }
             catch (Exception esC)
@@ -108,14 +116,14 @@ namespace Fuji.Configuraciones.Extensions
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load("info.xml");
+                doc.Load(path + "info.xml");
                 //Usuario
                 XmlNode nodeUser = doc.DocumentElement.SelectSingleNode("/Configuraciones/User");
                 nodeUser["tipoUsuario"].InnerText = _config.intTipoUsuario.ToString();
                 nodeUser["NombreUser"].InnerText = _config.vchNombreUsuario;
                 nodeUser["usuario"].InnerText = _config.vchUsuario;
                 nodeUser["Pass"].InnerText = _config.vchPassword;
-                doc.Save("info.xml");
+                doc.Save(path + "info.xml");
                 valido = true;
             }
             catch (Exception esC)

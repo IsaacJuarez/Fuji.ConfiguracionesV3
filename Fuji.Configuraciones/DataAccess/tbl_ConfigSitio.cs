@@ -21,15 +21,17 @@ namespace Fuji.Configuraciones.DataAccess
     
         public int id_Sitio { get; set; }
         public string vchClaveSitio { get; set; }
-        public string vchNombreSitio { get; set; }
+        public string vchnombreSitio { get; set; }
         public string vchIPCliente { get; set; }
         public string vchMaskCliente { get; set; }
         public Nullable<int> intPuertoCliente { get; set; }
-        public string vchIPServidor { get; set; }
-        public Nullable<int> intPuertoServer { get; set; }
-        public Nullable<System.DateTime> datFechaSistema { get; set; }
-        public Nullable<int> vchUserChanges { get; set; }
         public string vchAETitle { get; set; }
+        public string vchPathLocal { get; set; }
+        public string vchIPServidor { get; set; }
+        public Nullable<int> in_tPuertoServer { get; set; }
+        public string vchAETitleServer { get; set; }
+        public Nullable<System.DateTime> datFechaSistema { get; set; }
+        public string vchUserAdmin { get; set; }
         public Nullable<bool> bitActivo { get; set; }
     
         public virtual ICollection<tbl_CAT_Usuarios> tbl_CAT_Usuarios { get; set; }

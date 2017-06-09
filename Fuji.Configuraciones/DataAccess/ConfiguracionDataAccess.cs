@@ -1,4 +1,5 @@
-﻿using Fuji.Configuraciones.Extensions;
+﻿using Fuji.Configuraciones.Entidades;
+using Fuji.Configuraciones.Extensions;
 using System;
 using System.Linq;
 
@@ -125,43 +126,47 @@ namespace Fuji.Configuraciones.DataAccess
             return valido;
         }
 
-        public bool updateConfiguracion(tbl_ConfigSitio mdlConfig, ref string mensaje)
+        public bool updateConfiguracion(clsConfiguracion mdlConfig, ref string mensaje)
         {
             bool valido = false;
             try
             {
-                ConfigDA = new dbConfigEntities();
-                if (ConfigDA.tbl_ConfigSitio.Any(item => item.id_Sitio == mdlConfig.id_Sitio))
+                using (ConfigDA = new dbConfigEntities())
                 {
-                    ConfigDA = new dbConfigEntities();
-                    //Validar que la nueva clave del sitio no exista
-                    if (ConfigDA.tbl_ConfigSitio.Any(item => item.vchClaveSitio.ToUpper().Trim() == mdlConfig.vchClaveSitio.Trim().ToUpper() && item.id_Sitio != mdlConfig.id_Sitio))
+                    if (ConfigDA.tbl_ConfigSitio.Any(item => item.vchClaveSitio.Trim().ToUpper() == mdlConfig.vchClaveSitio.Trim().ToUpper()))
                     {
-                        mensaje = "La clave del sitio que deseas dar de alta ya está en uso, favor de editar.";
-                        valido = false;
-                    }
-                    else// end validacion de nueva clave.
-                    {
-                        tbl_ConfigSitio sitio = ConfigDA.tbl_ConfigSitio.First(i => i.id_Sitio == mdlConfig.id_Sitio);
+                        
+                        //Validar que la nueva clave del sitio no exista
+                        //if (ConfigDA.tbl_ConfigSitio.Any(item => item.vchClaveSitio.ToUpper().Trim() == mdlConfig.vchClaveSitio.Trim().ToUpper() && item.id_Sitio != mdlConfig.id_Sitio))
+                        //{
+                        //    mensaje = "La clave del sitio que deseas dar de alta ya está en uso, favor de editar.";
+                        //    valido = false;
+                        //}
+                        //else// end validacion de nueva clave.
+                        //{
+                        tbl_ConfigSitio sitio = ConfigDA.tbl_ConfigSitio.First(i => i.vchClaveSitio.Trim().ToUpper() == mdlConfig.vchClaveSitio.Trim().ToUpper());
                         //sitio.vchClaveSitio = mdlConfig.vchClaveSitio;
                         sitio.vchAETitle = mdlConfig.vchAETitle;
                         sitio.vchIPCliente = mdlConfig.vchIPCliente;
                         sitio.vchMaskCliente = mdlConfig.vchMaskCliente;
                         sitio.intPuertoCliente = mdlConfig.intPuertoCliente;
-                        sitio.vchNombreSitio = mdlConfig.vchNombreSitio;
+                        sitio.vchnombreSitio = mdlConfig.vchNombreSitio;
+                        sitio.vchPathLocal = mdlConfig.vchPathLocal;
                         //sitio.vchIPServidor = mdlConfig.vchIPServidor;
                         //sitio.intPuertoServer = mdlConfig.intPuertoServer;
-                        sitio.vchUserChanges = mdlConfig.vchUserChanges;
+                        sitio.vchUserAdmin = mdlConfig.vchUserChanges;
                         sitio.datFechaSistema = DateTime.Now;
                         ConfigDA.SaveChanges();
                         mensaje = "Cambios correctos.";
                         valido = true;
+                        ConfigDA.Dispose();
+                        //}
                     }
-                }
-                else
-                {
-                    valido = false;
-                    mensaje = "No es posible actualizar los datos.";
+                    else
+                    {
+                        valido = false;
+                        mensaje = "No es posible actualizar los datos.";
+                    }
                 }
             }
             catch (Exception esC)
@@ -173,37 +178,38 @@ namespace Fuji.Configuraciones.DataAccess
             return valido;
         }
 
-        public bool updateConfiguracionServer(tbl_ConfigSitio mdlConfig, ref string mensaje)
+        public bool updateConfiguracionServer(clsConfiguracion mdlConfig, ref string mensaje)
         {
             bool valido = false;
             try
             {
                 ConfigDA = new dbConfigEntities();
-                if (ConfigDA.tbl_ConfigSitio.Any(item => item.id_Sitio == mdlConfig.id_Sitio))
+                if (ConfigDA.tbl_ConfigSitio.Any(item => item.vchClaveSitio == mdlConfig.vchClaveSitio))
                 {
                     ConfigDA = new dbConfigEntities();
-                    //Validar que la nueva clave del sitio no exista
-                    if (ConfigDA.tbl_ConfigSitio.Any(item => item.vchClaveSitio.ToUpper().Trim() == mdlConfig.vchClaveSitio.Trim().ToUpper() && item.id_Sitio != mdlConfig.id_Sitio))
-                    {
-                        mensaje = "La clave del sitio que deseas dar de alta ya está en uso, favor de editar.";
-                        valido = false;
-                    }
-                    else// end validacion de nueva clave.
-                    {
-                        tbl_ConfigSitio sitio = ConfigDA.tbl_ConfigSitio.First(i => i.id_Sitio == mdlConfig.id_Sitio);
-                        //sitio.vchClaveSitio = mdlConfig.vchClaveSitio;
-                        //sitio.vchIPCliente = mdlConfig.vchIPCliente;
-                        //sitio.vchMaskCliente = mdlConfig.vchMaskCliente;
-                        //sitio.intPuertoCliente = mdlConfig.intPuertoCliente;
-                        //sitio.vchNombreSitio = mdlConfig.vchNombreSitio;
-                        sitio.vchIPServidor = mdlConfig.vchIPServidor;
-                        sitio.intPuertoServer = mdlConfig.intPuertoServer;
-                        sitio.vchUserChanges = mdlConfig.vchUserChanges;
-                        sitio.datFechaSistema = DateTime.Now;
-                        ConfigDA.SaveChanges();
-                        mensaje = "Cambios correctos.";
-                        valido = true;
-                    }
+                    ////Validar que la nueva clave del sitio no exista
+                    //if (ConfigDA.tbl_ConfigSitio.Any(item => item.vchClaveSitio.ToUpper().Trim() == mdlConfig.vchClaveSitio.Trim().ToUpper() && item.id_Sitio != mdlConfig.id_Sitio))
+                    //{
+                    //    mensaje = "La clave del sitio que deseas dar de alta ya está en uso, favor de editar.";
+                    //    valido = false;
+                    //}
+                    //else// end validacion de nueva clave.
+                    //{
+                    tbl_ConfigSitio sitio = ConfigDA.tbl_ConfigSitio.First(i => i.vchClaveSitio.Trim().ToUpper() == mdlConfig.vchClaveSitio.Trim().ToUpper());
+                    //sitio.vchClaveSitio = mdlConfig.vchClaveSitio;
+                    //sitio.vchIPCliente = mdlConfig.vchIPCliente;
+                    //sitio.vchMaskCliente = mdlConfig.vchMaskCliente;
+                    //sitio.intPuertoCliente = mdlConfig.intPuertoCliente;
+                    //sitio.vchNombreSitio = mdlConfig.vchNombreSitio;
+                    sitio.vchIPServidor = mdlConfig.vchIPServidor;
+                    sitio.in_tPuertoServer = mdlConfig.intPuertoServer;
+                    sitio.vchAETitleServer = mdlConfig.vchAETitleServer;
+                    sitio.vchUserAdmin = mdlConfig.vchUserChanges;
+                    sitio.datFechaSistema = DateTime.Now;
+                    ConfigDA.SaveChanges();
+                    mensaje = "Cambios correctos.";
+                    valido = true;
+                    //}
                 }
                 else
                 {

@@ -133,10 +133,10 @@ namespace Fuji.Configuraciones.DataAccess
             {
                 using (UserDA = new dbConfigEntities())
                 {
-                    if (UserDA.tbl_CAT_Usuarios.Any(u => u.vchUsuario == user && u.vchPassword == password && u.bitActivo))
+                    if (UserDA.tbl_CAT_Usuarios.Any(u => u.vchUsuario.ToUpper().Trim() == user.ToUpper().Trim() && u.vchPassword == password && (bool)u.bitActivo))
                     {
                         var _usr = (from em in UserDA.tbl_CAT_Usuarios
-                                    where em.bitActivo == true && em.vchUsuario == user && em.vchPassword == password && em.bitActivo
+                                    where em.bitActivo == true && em.vchUsuario == user && em.vchPassword == password && (bool)em.bitActivo
                                     select new
                                     {
                                         Id = em.intUsuarioID,

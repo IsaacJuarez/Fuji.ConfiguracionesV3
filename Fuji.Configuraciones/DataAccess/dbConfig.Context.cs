@@ -25,9 +25,9 @@ namespace Fuji.Configuraciones.DataAccess
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<tbl_ConfigSitio> tbl_ConfigSitio { get; set; }
         public DbSet<tbl_CAT_TipoUsuario> tbl_CAT_TipoUsuario { get; set; }
         public DbSet<tbl_CAT_Usuarios> tbl_CAT_Usuarios { get; set; }
+        public DbSet<tbl_ConfigSitio> tbl_ConfigSitio { get; set; }
         public DbSet<tbl_CAT_Extensiones> tbl_CAT_Extensiones { get; set; }
     }
 }

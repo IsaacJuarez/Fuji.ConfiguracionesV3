@@ -17,13 +17,15 @@ namespace Fuji.Configuraciones.Entidades
         public string vchIPServidor { get; set; }
         public int intPuertoServer { get; set; }
         public DateTime datFechaSistema { get; set; }
-        public int vchUserChanges { get; set; }
+        public string vchUserChanges { get; set; }
         public string vchAETitle { get; set; }
+        public String vchAETitleServer { get; set; }
         public bool bitActivo { get; set; }
         public int intTipoUsuario { get; set; }
         public string vchNombreUsuario { get; set; }
         public string vchUsuario { get; set; }
         public string vchPassword { get; set; }
+        public string vchPathLocal { get; set; }
 
         public clsConfiguracion()
         {
@@ -38,11 +40,13 @@ namespace Fuji.Configuraciones.Entidades
             vchAETitle = string.Empty;
             bitActivo = false;
             datFechaSistema = DateTime.MinValue;
-            vchUserChanges = int.MinValue;
+            vchUserChanges = string.Empty;
             intTipoUsuario = int.MinValue;
             vchNombreUsuario = string.Empty;
             vchUsuario = string.Empty;
             vchPassword = string.Empty;
+            vchAETitleServer = string.Empty;
+            vchPathLocal = string.Empty;
         }
     }
 }

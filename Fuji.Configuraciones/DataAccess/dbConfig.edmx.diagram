@@ -5,12 +5,12 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="c3cac0c9a988469ead554c938c589348" Name="Diagram1">
-        <EntityTypeShape EntityType="dbConfigModel.tbl_ConfigSitio" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbConfigModel.tbl_CAT_TipoUsuario" Width="1.5" PointX="5.125" PointY="1.125" />
-        <EntityTypeShape EntityType="dbConfigModel.tbl_CAT_Usuarios" Width="1.5" PointX="7.375" PointY="0.875" />
+        <EntityTypeShape EntityType="dbConfigModel.tbl_CAT_TipoUsuario" Width="1.5" PointX="0.75" PointY="1.625" />
+        <EntityTypeShape EntityType="dbConfigModel.tbl_CAT_Usuarios" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="dbConfigModel.tbl_ConfigSitio" Width="1.5" PointX="0.75" PointY="4.75" />
         <AssociationConnector Association="dbConfigModel.FK_CAT_TipoUsuarios_CAT_Usuarios" />
-        <AssociationConnector Association="dbConfigModel.FK_ConfigSitio_CAT_Usuarios" />
-        <EntityTypeShape EntityType="dbConfigModel.tbl_CAT_Extensiones" Width="1.5" PointX="10" PointY="1.625" />
+        <AssociationConnector Association="dbConfigModel.FK_ConfigSitio_CAT_Usuario" />
+        <EntityTypeShape EntityType="dbConfigModel.tbl_CAT_Extensiones" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

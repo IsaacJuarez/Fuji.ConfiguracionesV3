@@ -1,31 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="dbConfigModelStoreContainer" CdmEntityContainer="dbConfigEntities">
-    <EntitySetMapping Name="tbl_ConfigSitio">
-      <EntityTypeMapping TypeName="dbConfigModel.tbl_ConfigSitio">
-        <MappingFragment StoreEntitySet="tbl_ConfigSitio">
-          <ScalarProperty Name="bitActivo" ColumnName="bitActivo" />
-          <ScalarProperty Name="vchAETitle" ColumnName="vchAETitle" />
-          <ScalarProperty Name="id_Sitio" ColumnName="id_Sitio" />
-          <ScalarProperty Name="vchClaveSitio" ColumnName="vchClaveSitio" />
-          <ScalarProperty Name="vchNombreSitio" ColumnName="vchNombreSitio" />
-          <ScalarProperty Name="vchIPCliente" ColumnName="vchIPCliente" />
-          <ScalarProperty Name="vchMaskCliente" ColumnName="vchMaskCliente" />
-          <ScalarProperty Name="intPuertoCliente" ColumnName="intPuertoCliente" />
-          <ScalarProperty Name="vchIPServidor" ColumnName="vchIPServidor" />
-          <ScalarProperty Name="intPuertoServer" ColumnName="intPuertoServer" />
-          <ScalarProperty Name="datFechaSistema" ColumnName="datFechaSistema" />
-          <ScalarProperty Name="vchUserChanges" ColumnName="vchUserChanges" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tbl_CAT_TipoUsuario">
       <EntityTypeMapping TypeName="dbConfigModel.tbl_CAT_TipoUsuario">
         <MappingFragment StoreEntitySet="tbl_CAT_TipoUsuario">
           <ScalarProperty Name="vchUserAdmin" ColumnName="vchUserAdmin" />
           <ScalarProperty Name="datFecha" ColumnName="datFecha" />
           <ScalarProperty Name="bitEstatus" ColumnName="bitEstatus" />
-          <ScalarProperty Name="vchDescripcion" ColumnName="vchDescripcion" />
+          <ScalarProperty Name="vchTipoUsuario" ColumnName="vchTipoUsuario" />
           <ScalarProperty Name="intTipoUsuarioID" ColumnName="intTipoUsuarioID" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -39,9 +21,31 @@
           <ScalarProperty Name="bitActivo" ColumnName="bitActivo" />
           <ScalarProperty Name="vchPassword" ColumnName="vchPassword" />
           <ScalarProperty Name="vchUsuario" ColumnName="vchUsuario" />
+          <ScalarProperty Name="vchApellido" ColumnName="vchApellido" />
           <ScalarProperty Name="vchNombre" ColumnName="vchNombre" />
+          <ScalarProperty Name="intProyectoID" ColumnName="intProyectoID" />
           <ScalarProperty Name="intTipoUsuarioID" ColumnName="intTipoUsuarioID" />
           <ScalarProperty Name="intUsuarioID" ColumnName="intUsuarioID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_ConfigSitio">
+      <EntityTypeMapping TypeName="dbConfigModel.tbl_ConfigSitio">
+        <MappingFragment StoreEntitySet="tbl_ConfigSitio">
+          <ScalarProperty Name="bitActivo" ColumnName="bitActivo" />
+          <ScalarProperty Name="vchUserAdmin" ColumnName="vchUserAdmin" />
+          <ScalarProperty Name="datFechaSistema" ColumnName="datFechaSistema" />
+          <ScalarProperty Name="vchAETitleServer" ColumnName="vchAETitleServer" />
+          <ScalarProperty Name="in_tPuertoServer" ColumnName="in_tPuertoServer" />
+          <ScalarProperty Name="vchIPServidor" ColumnName="vchIPServidor" />
+          <ScalarProperty Name="vchPathLocal" ColumnName="vchPathLocal" />
+          <ScalarProperty Name="vchAETitle" ColumnName="vchAETitle" />
+          <ScalarProperty Name="intPuertoCliente" ColumnName="intPuertoCliente" />
+          <ScalarProperty Name="vchMaskCliente" ColumnName="vchMaskCliente" />
+          <ScalarProperty Name="vchIPCliente" ColumnName="vchIPCliente" />
+          <ScalarProperty Name="vchnombreSitio" ColumnName="vchnombreSitio" />
+          <ScalarProperty Name="vchClaveSitio" ColumnName="vchClaveSitio" />
+          <ScalarProperty Name="id_Sitio" ColumnName="id_Sitio" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

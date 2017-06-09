@@ -18,8 +18,8 @@ namespace Fuji.Configuraciones.Extensions
                 if (!Directory.Exists(LogDirectory))
                     Directory.CreateDirectory(LogDirectory);
                 DateTime Fecha = DateTime.Now;
-                string content = "CONFIGURACION[" + Fecha.ToString("yyyy/MM/dd HH:mm:ss") + "]" + " " + Mensaje;
-                string ArchivoLog = LogDirectory + Fecha.ToShortDateString().Replace("/", "-") + ".txt";
+                string content = "[" + Fecha.ToString("yyyy/MM/dd HH:mm:ss") + "]" + " " + Mensaje;
+                string ArchivoLog = LogDirectory + "CONFIGURACION[" +  Fecha.ToShortDateString().Replace("/", "-") + "].txt";
                 using (StreamWriter file = new StreamWriter(ArchivoLog, true))
                 {
                     file.WriteLine(content);
@@ -76,12 +76,12 @@ namespace Fuji.Configuraciones.Extensions
                                //comboBox6.Items.Add(objMO["Caption"]);
                     ipaddresses = (string[])objMO["IPAddress"];
                     subnets = (string[])objMO["IPSubnet"];
-                    mascara = subnets[0];
+                    mascara = subnets[0].ToString();
                     gateways = (string[])objMO["DefaultIPGateway"];
                     dns = (string[])objMO["DNSServerSearchOrder"];
                     hostname = (String)objMO["DNSHostName"];
                     nicnames = (String[])objMO["Caption"];
-                    mascara += mascara + "|" + (nicnames[0] != null ? nicnames[0].ToString() : "");
+                    //mascara += mascara + "|" + (nicnames[0] != null ? nicnames[0].ToString() : "");
                     //groupBox1.Text = "Info TCP/IPv4: " + hostname;
                     //comboBox6.Items.Add(objMO["Caption"]);
                 }
@@ -102,7 +102,7 @@ namespace Fuji.Configuraciones.Extensions
             try
             {
                 PingReply reply = pinger.Send(nameOrAddress);
-                pingable = reply.Status == IPStatus.Success;
+                pingable = reply.Status == IPStatus.Success ? true : false;
             }
             catch (PingException)
             {

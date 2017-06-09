@@ -15,12 +15,14 @@ namespace Fuji.Configuraciones.DataAccess
     public partial class tbl_CAT_Usuarios
     {
         public int intUsuarioID { get; set; }
-        public int intTipoUsuarioID { get; set; }
+        public Nullable<int> intTipoUsuarioID { get; set; }
+        public Nullable<int> intProyectoID { get; set; }
         public string vchNombre { get; set; }
+        public string vchApellido { get; set; }
         public string vchUsuario { get; set; }
         public string vchPassword { get; set; }
-        public bool bitActivo { get; set; }
-        public System.DateTime datFecha { get; set; }
+        public Nullable<bool> bitActivo { get; set; }
+        public Nullable<System.DateTime> datFecha { get; set; }
         public string vchUserAdmin { get; set; }
         public Nullable<int> id_Sitio { get; set; }
     

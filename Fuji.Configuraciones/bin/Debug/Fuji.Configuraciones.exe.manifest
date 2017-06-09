@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Fuji.Configuraciones.exe" size="1709504">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Fuji.Configuraciones.exe" size="1733056">
       <assemblyIdentity name="Fuji.Configuraciones" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>mNW09vFAS6DArb6oQ/IiZZhxn4Vm38sKwXMura3C+ZA=</dsig:DigestValue>
+        <dsig:DigestValue>iSIaMA3upcO3TphaoUBC9CBBANr7WHJExaE+TIuBlQo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -83,13 +83,31 @@
       <dsig:DigestValue>k95fEZV/TrHWHEbDuJ6TQ8wDJV40V2ZhCZgh4QXVf88=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Fuji.Configuraciones.exe.config" size="1630">
+  <file name="DataAccessLocal\NapoleonAUX.Context.tt" size="26166">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>MJKloFqmgMQeiwmt81BtJrBYd5+my2zGkQfc17K0k9Q=</dsig:DigestValue>
+      <dsig:DigestValue>MonRiaMw/tJblwpR2ZUuPLwgLJ+3hG0SZjWixdacOOw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="DataAccessLocal\NapoleonAUX.tt" size="28752">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>iF3VXbJKKfI/MebLQVmNOavNsJ9QHlizt0bOSNt+bTg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Fuji.Configuraciones.exe.config" size="2457">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>U1yso/O7PX1VkT0kjiEg9pOFhNlUloIMyKtCkIevmBU=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

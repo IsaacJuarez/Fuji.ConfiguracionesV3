@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fuji.Configuraciones"
         mc:Ignorable="d"
-        Title="Configuración - Login" Height="319.925" Width="345.314" MaxHeight="350" MaxWidth="429" ResizeMode="NoResize"
+        Title="Configuración - Login" Height="350.925" Width="345.314" MaxHeight="400" MaxWidth="429" ResizeMode="NoResize"
         Icon="assets/favicon.ico">
 
     <Grid Margin="10,10,10,10">
@@ -32,7 +32,7 @@
             <TextBox x:Name="txtUsuario" CharacterCasing="Upper" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="10,9,0,0" TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="163"/>
             <Label x:Name="lblContraseña" Content="Contraseña *" HorizontalAlignment="Right" FontSize="12" FontWeight="Bold" Margin="0,7,0,1" Grid.Row="1" VerticalAlignment="Center" Height="28" Width="84"/>
             <StackPanel Grid.Column="1" HorizontalAlignment="Left" Height="26" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="163">
-                <PasswordBox x:Name="txtPassword" Height="25" MaxLength="10"/>
+                <PasswordBox x:Name="txtPassword" Height="25" MaxLength="12"/>
             </StackPanel>
             <Label x:Name="lblSitio" Content="Clave de Sitio" HorizontalAlignment="Right" FontSize="12" FontWeight="Bold" Margin="0,4" Grid.Row="2" VerticalAlignment="Center" Height="28" Width="86"/>
             <TextBox x:Name="txtSitio" CharacterCasing="Upper" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" MaxLength="5" Height="22" Margin="10,9,0,0" IsEnabled="False" TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="163"/>

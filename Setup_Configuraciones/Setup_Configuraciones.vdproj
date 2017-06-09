@@ -73,6 +73,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -89,6 +105,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -311,9 +335,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup_Configuraciones"
+        "ProductName" = "8:Feed2Cloud_Configuraciones"
         "ProductCode" = "8:{EA890387-1710-4582-976B-8C50A2CED600}"
-        "PackageCode" = "8:{9E31DFAA-FA3A-49E7-978F-16667EAA87F8}"
+        "PackageCode" = "8:{FC9BA1B0-4547-4570-803D-FA19EDBD2C30}"
         "UpgradeCode" = "8:{A1269B38-840D-4D5A-95E6-25E1AA2850C1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -324,7 +348,7 @@
         "Manufacturer" = "8:FUJIFILMMX"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Fuji_Config"
+        "Title" = "8:Feed2Cloud_Configuraciones"
         "Subject" = "8:"
         "ARPCONTACT" = "8:IJS powered by FUJIFILMMX"
         "Keywords" = "8:"
@@ -433,6 +457,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E4ABBE9F49B04EE9B3DF1B816BABBD8F"
+            {
+            "Name" = "8:Feed2Cloud"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_294BC2D1BBBA4E3C8CDD21E754534A2D"
+            "Folder" = "8:_A628F89F231D40878B1EF0951965FF70"
+            "WorkingFolder" = "8:_9A243DBF8B414A98A58FF4C27F5942AF"
+            "Icon" = "8:_39E73B3C4D1D4E779231A51C10CBA4EF"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {

@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dataaccesslocal/napoleonaux.context.tt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dataaccesslocal/napoleonaux.tt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dataaccess/dbconfig.context.tt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dataaccess/dbconfig.tt")]
 

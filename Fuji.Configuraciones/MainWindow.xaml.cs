@@ -2,6 +2,7 @@
 using Fuji.Configuraciones.Entidades;
 using Fuji.Configuraciones.Extensions;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Windows;
 
@@ -16,6 +17,8 @@ namespace Fuji.Configuraciones
         private ConfiguracionDataAccess ConfigDA;
         public static int id_sitio = 0;
         public static clsConfiguracion _configura;
+        public static string path = ConfigurationManager.AppSettings["ConfigDirectory"] != null ? ConfigurationManager.AppSettings["ConfigDirectory"].ToString() : ""; 
+        public static string URL_Feed2 = ConfigurationManager.AppSettings["URL_Feed2"] != null ? ConfigurationManager.AppSettings["URL_Feed2"].ToString() : "";
         public MainWindow()
         {
             try
@@ -25,7 +28,7 @@ namespace Fuji.Configuraciones
                 //ConfigDA = new ConfiguracionDataAccess();
                 //tbl_ConfigSitio _config = new tbl_ConfigSitio();
                 //string mensaje = "";
-                if (File.Exists("info.xml"))
+                if (File.Exists(path + "info.xml"))
                 {
                     _configura = XMLConfigurator.getXMLfile();
                     if (_configura != null)
@@ -33,15 +36,17 @@ namespace Fuji.Configuraciones
                         if (_configura.vchClaveSitio != "")
                         {
                             txtSitio.Text = _configura.vchClaveSitio;
+                            txtSitio.IsEnabled = false;
                         }
                         else
                         {
-                            SitioName site = new SitioName();
-                            site.Show();
-                            this.Close();
+                            //    SitioName site = new SitioName();
+                            //    site.Show();
+                            //    this.Close();
+                            txtSitio.IsEnabled = true;
                         }
                     }
-                    txtSitio.IsEnabled = false;
+                    
                 }
                 else
                 {
@@ -70,18 +75,18 @@ namespace Fuji.Configuraciones
                 {
                     //verificar en base de datos.
                     //Agregar un superUsuario
-                    //LoginDA = new LoginDataAccess();
-                    //string mensaje = "";
-                    //tbl_CAT_Usuarios mdl = new tbl_CAT_Usuarios();
-                    //bool success = LoginDA.Logear(txtUsuario.Text, Security.Encrypt(txtPassword.Password), ref mdl, ref mensaje);
+                    LoginDA = new LoginDataAccess();
+                    string mensaje = "";
+                    tbl_CAT_Usuarios mdl = new tbl_CAT_Usuarios();
+                    bool success = LoginDA.Logear(txtUsuario.Text, Security.Encrypt(txtPassword.Password), ref mdl, ref mensaje);
                     bool successPass = false;
                     bool successUser = false;
-                    if(_configura!= null)
+                    if (mdl != null)
                     {
-                        if(_configura.vchUsuario != "" && _configura.vchPassword != "")
+                        if ((mdl.vchUsuario != "" && mdl.vchPassword != null) && (mdl.vchUsuario != "" && mdl.vchPassword != ""))
                         {
-                            string pass = Security.Decrypt(_configura.vchPassword);
-                            successUser = txtUsuario.Text.Trim().ToUpper() == _configura.vchUsuario.Trim().ToUpper();
+                            string pass = Security.Decrypt(mdl.vchPassword);
+                            successUser = txtUsuario.Text.Trim().ToUpper() == mdl.vchUsuario.Trim().ToUpper();
                             successPass = txtPassword.Password == pass;
                         }
                     }
@@ -94,7 +99,7 @@ namespace Fuji.Configuraciones
                     }
                     else
                     {
-                        string mensaje = "";
+                        mensaje = "";
                         if(!successUser && !successPass)
                         {
                             mensaje = "Usuario y contraseña incorrecta.";
@@ -128,7 +133,7 @@ namespace Fuji.Configuraciones
         {
             try
             {
-                System.Diagnostics.Process.Start("http://localhost:50246/AgregarSitio/AgregarSitio.aspx");
+                System.Diagnostics.Process.Start(URL_Feed2);
             }
             catch(Exception eBS)
             {

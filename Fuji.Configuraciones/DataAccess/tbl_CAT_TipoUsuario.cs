@@ -20,9 +20,9 @@ namespace Fuji.Configuraciones.DataAccess
         }
     
         public int intTipoUsuarioID { get; set; }
-        public string vchDescripcion { get; set; }
-        public bool bitEstatus { get; set; }
-        public System.DateTime datFecha { get; set; }
+        public string vchTipoUsuario { get; set; }
+        public Nullable<bool> bitEstatus { get; set; }
+        public Nullable<System.DateTime> datFecha { get; set; }
         public string vchUserAdmin { get; set; }
     
         public virtual ICollection<tbl_CAT_Usuarios> tbl_CAT_Usuarios { get; set; }

@@ -22,4 +22,3 @@ C:\Users\IJUAREZ\Documents\Visual Studio 2015\Projects\Fuji.Configuraciones\Fuji
 C:\Users\IJUAREZ\Documents\Visual Studio 2015\Projects\Fuji.Configuraciones\Fuji.Configuraciones\obj\Debug\Fuji.Configuraciones.application
 C:\Users\IJUAREZ\Documents\Visual Studio 2015\Projects\Fuji.Configuraciones\Fuji.Configuraciones\obj\Debug\Fuji.Configuraciones.exe
 C:\Users\IJUAREZ\Documents\Visual Studio 2015\Projects\Fuji.Configuraciones\Fuji.Configuraciones\obj\Debug\Fuji.Configuraciones.pdb
-C:\Users\IJUAREZ\Documents\Visual Studio 2015\Projects\Fuji.Configuraciones\Fuji.Configuraciones\obj\Debug\Fuji.Configuraciones.csprojResolveAssemblyReference.cache
