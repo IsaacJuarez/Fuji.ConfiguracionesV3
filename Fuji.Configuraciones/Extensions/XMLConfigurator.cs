@@ -54,7 +54,7 @@ namespace Fuji.Configuraciones.Extensions
 
         }
 
-        public static bool setConfiguracionClienteXML(clsConfiguracion _config, ref string mensaje)
+        public static bool setConfiguracionClienteXML(Feed2Service.clsConfiguracion _config, ref string mensaje)
         {
             bool valido = false;
             try
@@ -86,7 +86,7 @@ namespace Fuji.Configuraciones.Extensions
             return valido;
         }
 
-        public static bool setConfiguracionServerXML(clsConfiguracion _config, ref string mensaje)
+        public static bool setConfiguracionServerXML(Feed2Service.clsConfiguracion _config, ref string mensaje)
         {
             bool valido = false;
             try

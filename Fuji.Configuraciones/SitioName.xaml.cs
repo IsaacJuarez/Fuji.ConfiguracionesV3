@@ -1,17 +1,7 @@
 ﻿using Fuji.Configuraciones.DataAccess;
+using Fuji.Configuraciones.Feed2Service;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Fuji.Configuraciones
 {
@@ -36,7 +26,7 @@ namespace Fuji.Configuraciones
                     {
                         //Guardar 
                         ConfigDA = new ConfiguracionDataAccess();
-                        tbl_ConfigSitio mdl = new tbl_ConfigSitio();
+                        Feed2Service.tbl_ConfigSitio mdl = new Feed2Service.tbl_ConfigSitio();
                         mdl.vchClaveSitio = txtSitio.Text.Trim().ToUpper();
                         mdl.vchnombreSitio = txtNombre.Text.ToUpper();
                         mdl.bitActivo = true;
@@ -45,8 +35,9 @@ namespace Fuji.Configuraciones
                         bool success = false;
                         string mensaje = "";
                         int id_sitio = 0;
-                        success = ConfigDA.setConfiguracion(mdl, ref mensaje, ref id_sitio);
-                        if(success)
+                        ClienteF2CResponse response = new ClienteF2CResponse();
+                        response = ConfigDA.setConfiguracion(mdl, ref mensaje, ref id_sitio);
+                        if(response.valido)
                         {
                             MessageBox.Show("Cambios correctos.");
                             MainWindow main = new MainWindow();

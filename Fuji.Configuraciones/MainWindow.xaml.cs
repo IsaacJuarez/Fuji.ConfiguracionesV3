@@ -1,6 +1,7 @@
 ﻿using Fuji.Configuraciones.DataAccess;
 using Fuji.Configuraciones.Entidades;
 using Fuji.Configuraciones.Extensions;
+using Fuji.Configuraciones.Feed2Service;
 using System;
 using System.Configuration;
 using System.IO;
@@ -16,7 +17,7 @@ namespace Fuji.Configuraciones
         private LoginDataAccess LoginDA;
         private ConfiguracionDataAccess ConfigDA;
         public static int id_sitio = 0;
-        public static clsConfiguracion _configura;
+        public static Entidades.clsConfiguracion _configura;
         public static string path = ConfigurationManager.AppSettings["ConfigDirectory"] != null ? ConfigurationManager.AppSettings["ConfigDirectory"].ToString() : ""; 
         public static string URL_Feed2 = ConfigurationManager.AppSettings["URL_Feed2"] != null ? ConfigurationManager.AppSettings["URL_Feed2"].ToString() : "";
         public MainWindow()
@@ -24,7 +25,7 @@ namespace Fuji.Configuraciones
             try
             {
                 InitializeComponent();
-                _configura = new clsConfiguracion();
+                _configura = new Entidades.clsConfiguracion();
                 //ConfigDA = new ConfiguracionDataAccess();
                 //tbl_ConfigSitio _config = new tbl_ConfigSitio();
                 //string mensaje = "";
@@ -77,8 +78,9 @@ namespace Fuji.Configuraciones
                     //Agregar un superUsuario
                     LoginDA = new LoginDataAccess();
                     string mensaje = "";
-                    tbl_CAT_Usuarios mdl = new tbl_CAT_Usuarios();
-                    bool success = LoginDA.Logear(txtUsuario.Text, Security.Encrypt(txtPassword.Password), ref mdl, ref mensaje);
+                    clsUsuario mdl = new clsUsuario();
+                    LoginResponse response = new LoginResponse();
+                    response = LoginDA.Logear(txtUsuario.Text, Security.Encrypt(txtPassword.Password), ref mdl, ref mensaje);
                     bool successPass = false;
                     bool successUser = false;
                     if (mdl != null)

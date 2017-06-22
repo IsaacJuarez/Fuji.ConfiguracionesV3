@@ -73,10 +73,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -130,22 +133,15 @@
     <Compile Include="DataAccessLocal\tbl_MST_EstudioAUX.cs">
       <DependentUpon>NapoleonAUX.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataAccess\tbl_CAT_Extensiones.cs">
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\tbl_CAT_TipoUsuario.cs">
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\tbl_CAT_Usuarios.cs">
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\tbl_ConfigSitio.cs">
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
     <Compile Include="Entidades\clsConfiguracion.cs" />
     <Compile Include="Extensions\WaitCursor.cs" />
     <Compile Include="Extensions\XMLConfigurator.cs" />
     <Compile Include="Extensions\WMIHelper.cs" />
+    <Compile Include="Service References\Feed2Service\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="SitioName.xaml.cs">
       <DependentUpon>SitioName.xaml</DependentUpon>
     </Compile>
@@ -158,21 +154,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataAccess\ConfiguracionDataAccess.cs" />
-    <Compile Include="DataAccess\dbConfig.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dbConfig.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\dbConfig.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dbConfig.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\dbConfig1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dbConfig.edmx</DependentUpon>
-    </Compile>
     <Compile Include="DataAccess\Helper.cs" />
     <Compile Include="DataAccess\LoginDataAccess.cs" />
     <Compile Include="Extensions\Log.cs" />
@@ -209,13 +190,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="DataAccess\dbConfig.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>dbConfig1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="DataAccess\dbConfig.edmx.diagram">
-      <DependentUpon>dbConfig.edmx</DependentUpon>
-    </None>
     <EntityDeploy Include="DataAccessLocal\NapoleonAUX.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>NapoleonAUX.Designer.cs</LastGenOutput>
@@ -230,6 +204,73 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.ClienteF2CResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.clsDashboardService.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.clsEntidadTabla.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.clsGrafica.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.clsMensaje.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.clsModeloCatalogo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.clsTop.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.clsUsuario.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.EstudioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.LoginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.PrioridadResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.ProyectoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.tbl_CAT_Proyecto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.tbl_CAT_TipoUsuario.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.tbl_ConfigSitio.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.tbl_RegistroSitio.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\Fuji.Configuraciones.Feed2Service.tbl_REL_ProyectoSitio.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Feed2Service\NapoleonService.wsdl" />
+    <None Include="Service References\Feed2Service\NapoleonService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Feed2Service\NapoleonService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Feed2Service\NapoleonService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Feed2Service\NapoleonService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Feed2Service\NapoleonService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Theme\StyleSheet1.less" />
   </ItemGroup>
   <ItemGroup>
@@ -260,21 +301,18 @@
       <DependentUpon>NapoleonAUX.edmx</DependentUpon>
       <LastGenOutput>NapoleonAUX.cs</LastGenOutput>
     </Content>
+    <None Include="Service References\Feed2Service\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\Feed2Service\configuration.svcinfo" />
+    <None Include="Service References\Feed2Service\configuration91.svcinfo" />
+    <None Include="Service References\Feed2Service\NapoleonService.disco" />
     <Resource Include="assets\offline.png" />
     <Resource Include="assets\online.png" />
     <Resource Include="assets\WallPaperWhite.jpg" />
     <Resource Include="assets\favicon.ico" />
     <Resource Include="assets\FEED2CJAV.png" />
-    <Content Include="DataAccess\dbConfig.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>dbConfig.edmx</DependentUpon>
-      <LastGenOutput>dbConfig.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataAccess\dbConfig.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>dbConfig.edmx</DependentUpon>
-      <LastGenOutput>dbConfig.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -287,6 +325,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\Feed2Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,6 +2,7 @@
 using Fuji.Configuraciones.DataAccessLocal;
 using Fuji.Configuraciones.Entidades;
 using Fuji.Configuraciones.Extensions;
+using Fuji.Configuraciones.Feed2Service;
 using Microsoft.Win32;
 using System;
 using System.Collections;
@@ -31,7 +32,7 @@ namespace Fuji.Configuraciones
         //public tbl_ConfigSitio mdlSitio = new tbl_ConfigSitio();
         //public static List<tbl_ConfigSitio> lstSitios = new List<tbl_ConfigSitio>();
         private ConfiguracionDataAccess ConfigDA;
-        private LoginDataAccess LoginDA;
+        //private LoginDataAccess LoginDA;
         public static string vchUsuarioMaster = "";
         public static string userID = "";
         public static string vchuserID = "";
@@ -49,11 +50,11 @@ namespace Fuji.Configuraciones
         public static string ConfigRepository = ConfigurationManager.AppSettings["ConfigRepository"] != null ? ConfigurationManager.AppSettings["ConfigRepository"].ToString() : "";
         public static string PuertoCliente = ConfigurationManager.AppSettings["PuertoCliente"] != null ? ConfigurationManager.AppSettings["PuertoCliente"].ToString() : "";
         public static string AETitleServer = ConfigurationManager.AppSettings["AETitleServer"] != null ? ConfigurationManager.AppSettings["AETitleServer"].ToString() : "";
-        
+        public static bool mensajesInicial = false;
 
 
 
-        public static clsConfiguracion _conf;
+        public static Entidades.clsConfiguracion _conf;
 
         public static string nickname;
         public static string[] ipAddresses;
@@ -97,9 +98,10 @@ namespace Fuji.Configuraciones
                     {
                         Mask_local_global = maskg;
                     }
-                    _conf = new clsConfiguracion();
+                    _conf = new Entidades.clsConfiguracion();
                     if (File.Exists(path + "info.xml"))
                     {
+                        mensajesInicial = false;
                         _conf = XMLConfigurator.getXMLfile();
                         if (_conf != null)
                         {
@@ -173,26 +175,32 @@ namespace Fuji.Configuraciones
                     }
                     else
                     {
+                        mensajesInicial = true;
                         string mensaje = "";
                         ConfigDA = new ConfiguracionDataAccess();
-                        bool existe = ConfigDA.getVerificaSitio(vchClaveSitio, ref mensaje);
-                        if (existe)
+                        ClienteF2CResponse response = new ClienteF2CResponse();
+                        response = ConfigDA.getVerificaSitio(vchClaveSitio, id_Sitio_Global, ref mensaje);
+                        if (response.valido)
                         {
-                            DataAccess.tbl_ConfigSitio mdl = new DataAccess.tbl_ConfigSitio();
+                            Feed2Service.tbl_ConfigSitio mdl = new Feed2Service.tbl_ConfigSitio();
                             ConfigDA = new ConfiguracionDataAccess();
-                            mdl = ConfigDA.getConfiguracion(vchClaveSitio, ref mensaje);
-                            if (mdl != null)
+                            ClienteF2CResponse response2 = new ClienteF2CResponse();
+                            response2 = ConfigDA.getConfiguracion(vchClaveSitio, id_Sitio_Global, ref mensaje);
+                            if (response2 != null)
                             {
-                                fillSitiodb(mdl);
-                                createFileXML(mdl);
-                                setCliente();
-                                setServer();
-                                string mesagge = "";
-                                DataAccessLocal.tbl_ConfigSitioAUX mdlComplete = new DataAccessLocal.tbl_ConfigSitioAUX();
-                                mdlComplete = obtenerSitioComplete(mdl);
-                                if (mdlComplete != null)
+                                if (response2.ConfigSitio != null)
                                 {
-                                    NapoleonAUXDataAccess.setConfiguracion(mdlComplete, ref mesagge);
+                                    fillSitiodb(response2.ConfigSitio);
+                                    createFileXML(id_Sitio_Global, vchClaveSitio);
+                                    setCliente();
+                                    setServer();
+                                    string mesagge = "";
+                                    DataAccessLocal.tbl_ConfigSitioAUX mdlComplete = new DataAccessLocal.tbl_ConfigSitioAUX();
+                                    mdlComplete = obtenerSitioComplete(response2.ConfigSitio);
+                                    if (mdlComplete != null)
+                                    {
+                                        NapoleonAUXDataAccess.setConfiguracion(mdlComplete, ref mesagge);
+                                    }
                                 }
                             }
                         }
@@ -212,7 +220,7 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private DataAccessLocal.tbl_ConfigSitioAUX obtenerSitioComplete(DataAccess.tbl_ConfigSitio mdlC)
+        private DataAccessLocal.tbl_ConfigSitioAUX obtenerSitioComplete(Feed2Service.clsConfiguracion mdlC)
         {
             DataAccessLocal.tbl_ConfigSitioAUX mdl = new DataAccessLocal.tbl_ConfigSitioAUX();
             try
@@ -221,16 +229,16 @@ namespace Fuji.Configuraciones
                 mdl.bitActivo = true;
                 mdl.datFechaSistema = DateTime.Now;
                 mdl.intPuertoCliente = mdlC.intPuertoCliente > 0 ? mdlC.intPuertoCliente : Convert.ToInt32(txtPuertoCliente.ToString());
-                mdl.in_tPuertoServer = mdlC.in_tPuertoServer > 0 ? mdlC.in_tPuertoServer : Convert.ToInt32(txtPuertoServer.ToString());
+                mdl.in_tPuertoServer = mdlC.intPuertoServer > 0 ? mdlC.intPuertoServer : Convert.ToInt32(txtPuertoServer.ToString());
                 mdl.vchAETitle = mdlC.vchAETitle != "" ? mdlC.vchAETitle : txtAET.Text.ToString();
                 mdl.vchAETitleServer = mdlC.vchAETitleServer != "" ? mdlC.vchAETitleServer : txtAETitleServer.Text.ToString();
                 mdl.vchClaveSitio = mdlC.vchClaveSitio != "" ? mdlC.vchClaveSitio : txtClaveSitio.Text.ToString();
                 mdl.vchIPCliente = mdlC.vchIPCliente != "" ? mdlC.vchIPCliente : (txtIPC1.Text.ToString() + "." + txtIPC2.Text.ToString() + "." + txtIPC3.Text.ToString() + "." + txtIPC4.Text.ToString());
                 mdl.vchIPServidor = mdlC.vchIPServidor != "" ? mdlC.vchIPServidor : (txtIPS1.Text.ToString() + "." + txtIPS2.Text.ToString() + "." + txtIPS3.Text.ToString() + "." + txtIPS4.Text.ToString());
                 mdl.vchMaskCliente = mdlC.vchMaskCliente != "" ? mdlC.vchMaskCliente : (txtMaskC1.Text.ToString() + "." + txtMaskC2.Text.ToString() + "." + txtMaskC3.Text.ToString() + "." + txtMaskC4.Text.ToString());
-                mdl.vchnombreSitio = mdlC.vchnombreSitio != "" ? mdlC.vchnombreSitio : txtNombreSitio.Text.ToString();
+                mdl.vchnombreSitio = mdlC.vchNombreSitio != "" ? mdlC.vchNombreSitio : txtNombreSitio.Text.ToString();
                 mdl.vchPathLocal = mdlC.vchPathLocal != "" ? mdlC.vchPathLocal : txtFolder.Text.ToString();
-                mdl.vchUserAdmin = mdl.vchUserAdmin != "" ? mdlC.vchUserAdmin : txtUserActive.Text.ToString();
+                mdl.vchUserAdmin = mdl.vchUserAdmin != "" ? mdlC.vchUserChanges : txtUserActive.Text.ToString();
             }
             catch(Exception eGO)
             {
@@ -239,19 +247,22 @@ namespace Fuji.Configuraciones
             return mdl;
         }
 
-        private void createFileXML(DataAccess.tbl_ConfigSitio mdl)
+        private void createFileXML(int id_Sitio, string vchClaveSitio)
         {
             try
             {
-                string formato = "";
-                formato = ConfigDA.getXMLFileConfig("XMLCONFIG");
-                if(formato!= "")
+                ClienteF2CResponse response = new ClienteF2CResponse();
+                response = ConfigDA.getXMLFileConfig("XMLCONFIG", id_Sitio, vchClaveSitio);
+                if (response != null)
                 {
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-                    System.IO.StreamWriter file = new System.IO.StreamWriter(path + "info.xml");
-                    file.WriteLine(formato);
-                    file.Close();
+                    if (response.vchFormato != "")
+                    {
+                        if (!Directory.Exists(path))
+                            Directory.CreateDirectory(path);
+                        System.IO.StreamWriter file = new System.IO.StreamWriter(path + "info.xml");
+                        file.WriteLine(response.vchFormato);
+                        file.Close();
+                    }
                 }
             }
             catch(Exception ecFXML)
@@ -287,7 +298,7 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private void fillSitio(clsConfiguracion mdlSitio)
+        private void fillSitio(Entidades.clsConfiguracion mdlSitio)
         {
             try
             {
@@ -349,7 +360,7 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private void fillSitiodb(DataAccess.tbl_ConfigSitio mdlSitio)
+        private void fillSitiodb(Feed2Service.clsConfiguracion mdlSitio)
         {
             try
             {
@@ -442,9 +453,9 @@ namespace Fuji.Configuraciones
                     }
                 }
 
-                txtNombreSitio.Text = mdlSitio.vchnombreSitio;
+                txtNombreSitio.Text = mdlSitio.vchNombreSitio;
                 txtPuertoCliente.Text = mdlSitio.intPuertoCliente > 0 ? mdlSitio.intPuertoCliente.ToString() : (PuertoCliente != "" ? PuertoCliente : "");
-                txtPuertoServer.Text = mdlSitio.in_tPuertoServer > 0 ? mdlSitio.in_tPuertoServer.ToString() : (PuertoServer != "" ? PuertoServer : "");
+                txtPuertoServer.Text = mdlSitio.intPuertoServer > 0 ? mdlSitio.intPuertoServer.ToString() : (PuertoServer != "" ? PuertoServer : "");
                 txtAETitleServer.Text = AETitleServer;
                 txtAET.Text = mdlSitio.vchAETitle;
                 txtFolder.Text = ConfigRepository;
@@ -531,7 +542,7 @@ namespace Fuji.Configuraciones
                 if (validarCliente())
                 {
                     ConfigDA = new ConfiguracionDataAccess();
-                    clsConfiguracion mdl = new clsConfiguracion();
+                    Feed2Service.clsConfiguracion mdl = new Feed2Service.clsConfiguracion();
                     string mensaje = "";
                     mdl = obtenerCliente();
                     if (mdl != null)
@@ -541,8 +552,9 @@ namespace Fuji.Configuraciones
                         //if (mdl.id_Sitio > 0)
                         //{
                         ConfigDA = new ConfiguracionDataAccess();
-                        successDBServer = ConfigDA.updateConfiguracion(mdl, ref mensaje);
-                        if(!successDBServer)
+                        ClienteF2CResponse response = new ClienteF2CResponse();
+                        response = ConfigDA.updateConfiguracion(mdl, ref mensaje);
+                        if(!response.valido)
                         {
                             Log.EscribeLog("No  se pudo almacenar la configuración para el cliente del sitio: " + mdl.vchClaveSitio + " , error:" + mensaje);
                         }
@@ -560,11 +572,14 @@ namespace Fuji.Configuraciones
                                 WMIHelper.SetIP(nickname, ipcliente, maskCliente, gateways[0], DN);
                                 //changeIP(ipcliente, maskCliente);
                             }
-                            MessageBox.Show("Cambios correctos.", "Exito");
+                            if(!mensajesInicial)
+                            {
+                                MessageBox.Show("Cambios correctos.", "Feed2Cloud");
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("Existe un erro al actuzalizar los datos: " + mensaje, "Error:");
+                            MessageBox.Show("Existe un error al actuzalizar los datos: " + mensaje, "Error:");
                         }
                     }
                     else
@@ -580,9 +595,9 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private clsConfiguracion obtenerCliente()
+        private Feed2Service.clsConfiguracion obtenerCliente()
         {
-            clsConfiguracion mdl = new clsConfiguracion();
+            Feed2Service.clsConfiguracion mdl = new Feed2Service.clsConfiguracion();
             try
             {
                 mdl.vchClaveSitio = txtClaveSitio.Text;
@@ -781,16 +796,16 @@ namespace Fuji.Configuraciones
             {
                 if (validaServer())
                 {
-                    clsConfiguracion mdlServer = new clsConfiguracion();
+                    Feed2Service.clsConfiguracion mdlServer = new Feed2Service.clsConfiguracion();
                     if (vchClaveSitioGlobal != "")
                     {
                         mdlServer = obtenerServer();
                         bool success = false;
-                        bool successDBServer = false;
                         string mensaje = "";
                         ConfigDA = new ConfiguracionDataAccess();
-                        successDBServer = ConfigDA.updateConfiguracionServer(mdlServer,ref mensaje);
-                        if(!successDBServer)
+                        ClienteF2CResponse response = new ClienteF2CResponse();
+                        response = ConfigDA.updateConfiguracionServer(mdlServer,ref mensaje);
+                        if(!response.valido)
                         {
                             Log.EscribeLog("No  se pudo almacenar la configuración para el servidor del sitio: " + mdlServer.vchClaveSitio + " , error:" + mensaje);
                         }
@@ -800,7 +815,15 @@ namespace Fuji.Configuraciones
                             //enableServer();
                             makeping(mdlServer.vchIPServidor);
                             cambiosServer = false;
-                            MessageBox.Show("Cambios correctos.", "Exito");
+                            if(!mensajesInicial)
+                            {
+                                MessageBox.Show("Cambios correctos.", "Feed2Cloud");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Se cargó correctamente la configuración inicial.", "Feed2Cloud");
+                                mensajesInicial = false;
+                            }
                         }
                         else
                         {
@@ -819,9 +842,9 @@ namespace Fuji.Configuraciones
             }
         }
 
-        private clsConfiguracion obtenerServer()
+        private Feed2Service.clsConfiguracion obtenerServer()
         {
-            clsConfiguracion mdl = new clsConfiguracion();
+            Feed2Service.clsConfiguracion mdl = new Feed2Service.clsConfiguracion();
             try
             {
                 mdl.id_Sitio = id_Sitio_Global;
