@@ -1934,6 +1934,16 @@ namespace Fuji.Configuraciones
                     Log.EscribeLog("SenderFeed2SCUService Detenido.");
                 }
                 c.Refresh();
+                if (c != null && c.Status == ServiceControllerStatus.Paused)
+                {
+                    c.Stop();
+                    c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    Log.EscribeLog("SenderFeed2SCUService Detenido.");
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("SenderFeed2SCUService Iniciado.");
+                }
+                c.Refresh();
                 if (c != null && c.Status == ServiceControllerStatus.Stopped)
                 {
                     c.Start();
@@ -1960,6 +1970,19 @@ namespace Fuji.Configuraciones
                     c.Stop();
                     c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
                     Log.EscribeLog("SyncFeed2Service Detenido.");
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("SyncFeed2Service Iniciado.");
+                }
+                c.Refresh();
+                if (c != null && c.Status == ServiceControllerStatus.Paused)
+                {
+                    c.Stop();
+                    c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                    Log.EscribeLog("SyncFeed2Service Detenido.");
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("SyncFeed2Service Iniciado.");
                 }
                 c.Refresh();
                 if (c != null && c.Status == ServiceControllerStatus.Stopped)
@@ -1988,12 +2011,19 @@ namespace Fuji.Configuraciones
                     c.Stop();
                     c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
                     Log.EscribeLog("ListenerSCPService Detenido.");
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("ListenerSCPService Iniciado.");
                 }
+                c.Refresh();
                 if (c != null && c.Status == ServiceControllerStatus.Paused)
                 {
                     c.Stop();
                     c.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
                     Log.EscribeLog("ListenerSCPService Detenido.");
+                    c.Start();
+                    c.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                    Log.EscribeLog("ListenerSCPService Iniciado.");
                 }
                 c.Refresh();
                 if (c != null && c.Status == ServiceControllerStatus.Stopped)

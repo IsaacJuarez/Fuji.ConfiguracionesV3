@@ -76,7 +76,10 @@ namespace Fuji.Configuraciones.Extensions
                                //comboBox6.Items.Add(objMO["Caption"]);
                     ipaddresses = (string[])objMO["IPAddress"];
                     subnets = (string[])objMO["IPSubnet"];
-                    mascara = subnets[0].ToString();
+                    if (subnets[0] != null)
+                    {
+                        mascara = subnets[0].ToString();
+                    }
                     gateways = (string[])objMO["DefaultIPGateway"];
                     dns = (string[])objMO["DNSServerSearchOrder"];
                     hostname = (String)objMO["DNSHostName"];
